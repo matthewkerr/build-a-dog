@@ -1,0 +1,180 @@
+Akita
+Alapaha Blue Blood Bulldog
+Alaskan Malamute
+Alusky
+American Bulldog
+American Eskimo Dog
+American Foxhound
+American Pit Bull Terrier
+American Staffordshire Terrier
+Anatolian Shepherd Dog
+Appenzeller Sennenhund
+Aussiedoodle
+Australian Cattle Dog
+Australian Shepherd
+Barbet
+Basenji
+Basset Hound
+Beagle
+Bearded Collie
+Belgian Laekenois
+Belgian Malinois
+Belgian Sheepdog
+Belgian Tervuren
+Bergamasco Sheepdog
+Berger Picard
+Bernedoodle
+Bernese Mountain Dog
+Bichon Frise
+Black Russian Terrier
+Bluetick Coonhound
+Boerboel
+Bolognese
+Border Collie
+Boston Terrier
+Boxer
+Briard
+Brittany
+Bulldog
+Cairn Terrier
+Cane Corso
+Carolina Dog
+Cavalier King Charles Spaniel
+Cavapoo
+Chihuahua
+Chinese Crested
+Chiweenie
+Cirneco dell’Etna
+Clumber Spaniel
+Cockapoo
+Cocker Spaniel
+Collie
+Coton de Tulear
+Dachshund
+Dandie Dinmont Terrier
+Doberman Pinscher
+Dutch Shepherd
+English Bulldog
+English Coonhound
+English Foxhound
+English Setter
+English Springer Spaniel
+English Toy Spaniel
+Entlebucher Mountain Dog
+Eurasier
+Feist
+Field Spaniel
+Finnish Lapphund
+Finnish Spitz
+French Bulldog
+French Spaniel
+Frenchton
+German Pinscher
+German Shepherd
+German Shorthaired Pointer
+German Wirehaired Pointer
+Giant Schnauzer
+Glen of Imaal Terrier
+Golden Retriever
+Goldendoodle
+Great Dane
+Greater Swiss Mountain Dog
+Greyhound
+Havanese
+Havapoo
+Huskydoodle
+Ibizan Hound
+Icelandic Sheepdog
+Irish Setter
+Irish Terrier
+Irish Water Spaniel
+Irish Wolfhound
+Italian Greyhound
+Jack Russell Terrier
+Japanese Chin
+Japanese Spitz
+Japanese Terrier
+Keeshond
+Kerry Blue Terrier
+Komondor
+Kuvasz
+Labradoodle
+Labrador Retriever
+Lagotto Romagnolo
+Lakeland Terrier
+Leonberger
+Lhasa Apso
+Lowchen
+Maltese
+Maltipoo
+Manchester Terrier
+Mastiff
+Miniature Bull Terrier
+Miniature Poodle
+Miniature Schnauzer
+Morkie
+Mountain Cur
+Neapolitan Mastiff
+Newfoundland
+Newfypoo
+Norfolk Terrier
+Norwegian Elkhound
+Norwich Terrier
+Old English Sheepdog
+Otterhound
+Papillon
+Peekapoo
+Pekingese
+Pembroke Welsh Corgi
+Petit Basset Griffon Vendéen
+Pharaoh Hound
+Pitsky
+Plott Hound
+Pointer
+Polish Lowland Sheepdog
+Pomeranian
+Pomsky
+Poodle
+Portuguese Podengo
+Puggle
+Puli
+Rat Terrier
+Redbone Coonhound
+Rhodesian Ridgeback
+Rottweiler
+Saint Bernard
+Samoyed
+Schnoodle
+Scottish Terrier
+Sealyham Terrier
+Sheepadoodle
+Shetland Sheepdog
+Shiba Inu
+Shih Tzu
+Shihpoo
+Shorkie
+Silky Terrier
+Skye Terrier
+Sloughi
+Smooth Fox Terrier
+Soft Coated Wheaten Terrier
+Spanish Mastiff
+Spanish Water Dog
+Spinone Italiano
+Staffordshire Bull Terrier
+Sussex Spaniel
+Swedish Vallhund
+Thai Ridgeback
+Tibetan Mastiff
+Tibetan Spaniel
+Tibetan Terrier
+Toy Fox Terrier
+Toy Manchester Terrier
+Treeing Walker Coonhound
+Vizsla
+Weimaraner
+West Highland White Terrier
+Whippet
+Xoloitzcuintli
+Yorkipoo
+Yorkshire Terrier
