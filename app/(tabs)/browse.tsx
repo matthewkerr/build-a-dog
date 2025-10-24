@@ -71,6 +71,28 @@ export default function BrowseScreen() {
     }
   };
 
+  const handleResetDatabase = async () => {
+    try {
+      console.log('🗄️ Resetting database to load shelter scores...');
+      
+      // Clear the database completely
+      await databaseManager.clearDatabase();
+      
+      // Force reseed with shelter scores data
+      await databaseManager.forceReseedDatabase();
+      
+      console.log('🔄 Loading breeds with shelter scores...');
+      await loadAllBreeds();
+      await loadStats();
+      setCurrentBreedIndex(0);
+      
+      console.log('✅ Database reset successfully with shelter scores!');
+      console.log('🏠 You should now see breeds with proper shelter availability scores');
+    } catch (error) {
+      console.error('❌ Error resetting database:', error);
+    }
+  };
+
   const onGestureEvent = (event: any) => {
     const { translationX, state } = event.nativeEvent;
     
@@ -199,7 +221,16 @@ export default function BrowseScreen() {
           <View style={styles.separator} />
 
           {/* Action Buttons */}
-          {/* <View style={styles.buttonContainer}>
+          <View style={styles.resetInfoContainer}>
+            <Text style={styles.resetInfoText}>
+              🗄️ <Text style={styles.resetInfoHighlight}>Reset Database</Text> button will reload all breed data with shelter availability scores
+            </Text>
+            <Text style={styles.resetInfoSubtext}>
+              Use this if you're getting 0 search results or seeing "undefined" shelter scores
+            </Text>
+          </View>
+          
+          <View style={styles.buttonContainer}>
             <Pressable style={styles.button} onPress={loadStats}>
               <Text style={styles.buttonText}>Refresh Stats</Text>
             </Pressable>
@@ -211,7 +242,11 @@ export default function BrowseScreen() {
             <Pressable style={[styles.button, styles.clearButton]} onPress={handleClearAndReseed}>
               <Text style={styles.buttonText}>🔄 Load All Breeds</Text>
             </Pressable>
-          </View> */}
+
+            <Pressable style={[styles.button, styles.resetButton]} onPress={handleResetDatabase}>
+              <Text style={styles.buttonText}>🗄️ Reset Database</Text>
+            </Pressable>
+          </View>
         </ScrollView>
       </View>
     </PanGestureHandler>
@@ -412,6 +447,34 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     backgroundColor: Colors.light.secondarySand,
+  },
+  resetButton: {
+    backgroundColor: Colors.light.primaryTeal,
+    borderWidth: 2,
+    borderColor: Colors.light.primaryTeal,
+  },
+  resetInfoContainer: {
+    alignItems: 'center',
+    marginVertical: 20,
+    paddingHorizontal: 20,
+  },
+  resetInfoText: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: Colors.light.textCharcoal,
+    marginBottom: 8,
+    lineHeight: 22,
+  },
+  resetInfoHighlight: {
+    fontWeight: 'bold',
+    color: Colors.light.primaryTeal,
+  },
+  resetInfoSubtext: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: Colors.light.textCharcoal,
+    opacity: 0.8,
+    fontStyle: 'italic',
   },
   buttonText: {
     color: 'white',

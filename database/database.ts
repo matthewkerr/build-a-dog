@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import breedData from '../seeder/dog_breeds_corrected.json';
+import breedData from '../seeder/dog_breeds_images_fixed.json';
 
 export interface DogBreed {
   id: number;
@@ -15,6 +15,7 @@ export interface DogBreed {
   special_needs_possible: boolean;
   description: string;
   image_filename: string;
+  shelter_availability_score: number;
 }
 
 export interface Favorite {
@@ -66,7 +67,8 @@ class DatabaseManager {
         senior_friendly BOOLEAN NOT NULL,
         special_needs_possible BOOLEAN NOT NULL,
         description TEXT NOT NULL,
-        image_filename TEXT NOT NULL
+        image_filename TEXT NOT NULL,
+        shelter_availability_score INTEGER NOT NULL DEFAULT 5
       );
     `);
 
@@ -88,12 +90,26 @@ class DatabaseManager {
     console.log(`🌱 Seeding breed data... Found ${breedData.length} breeds to seed`);
     console.log(`📊 First breed sample: ${breedData[0]?.breed} - ${breedData[0]?.size} - ${breedData[0]?.description?.substring(0, 50)}...`);
     
+    // Log size distribution for verification
+    const sizeDistribution = breedData.reduce((acc, breed) => {
+      acc[breed.size] = (acc[breed.size] || 0) + 1;
+      return acc;
+    }, {} as { [key: string]: number });
+    console.log(`📏 Size distribution:`, sizeDistribution);
+    
+    // Log bulldog breeds specifically
+    const bulldogBreeds = breedData.filter(breed => breed.breed.includes('Bulldog'));
+    console.log(`🐕 Bulldog breeds and their sizes:`);
+    bulldogBreeds.forEach(breed => {
+      console.log(`   ${breed.breed}: ${breed.size}`);
+    });
+    
     const insertStatement = await this.db.prepareAsync(`
       INSERT INTO breeds (
         id, breed, size, energy_level, good_with_kids, good_with_pets,
         trainability, grooming_needs, companion_or_guardian, senior_friendly,
-        special_needs_possible, description, image_filename
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        special_needs_possible, description, image_filename, shelter_availability_score
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     try {
@@ -114,7 +130,8 @@ class DatabaseManager {
           breed.senior_friendly === 1, // Convert 1/0 to boolean
           breed.special_needs_possible === 1, // Convert 1/0 to boolean
           breed.description,
-          breed.image_filename
+          breed.image_filename,
+          breed.shelter_availability_score || 5 // Use provided score or default to 5
         ]);
       }
       
@@ -148,6 +165,7 @@ class DatabaseManager {
     companion_or_guardian?: string;
     senior_friendly?: boolean;
     special_needs_possible?: boolean;
+    prioritize_adoptable?: boolean;
   }): Promise<DogBreed[]> {
     if (!this.db) throw new Error('Database not initialized');
 
@@ -212,7 +230,12 @@ class DatabaseManager {
       params.push(filters.special_needs_possible);
     }
 
-    query += ' ORDER BY breed';
+    // Add shelter availability priority if requested
+    if (filters.prioritize_adoptable) {
+      query += ' ORDER BY shelter_availability_score DESC, breed';
+    } else {
+      query += ' ORDER BY breed';
+    }
 
     return await this.db.getAllAsync<DogBreed>(query, params);
   }

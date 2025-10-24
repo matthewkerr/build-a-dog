@@ -66,8 +66,24 @@ function BreedMatchCard({ match, index, onImagePress }: BreedMatchCardProps) {
       <View style={styles.matchHeader}>
         <Text style={styles.matchRank}>#{index + 1}</Text>
         <Text style={styles.matchName}>{match.breed.breed}</Text>
-        <Text style={styles.matchScore}>{match.score}% match</Text>
+        <View style={styles.scoreContainer}>
+          <Text style={styles.matchScore}>{match.score}% match</Text>
+          {match.breed.shelter_availability_score >= 7 && (
+            <Text style={styles.shelterScore}>
+              🏠 Shelter Score: {match.breed.shelter_availability_score}/10
+            </Text>
+          )}
+        </View>
       </View>
+      
+      {/* Shelter Availability Badge */}
+      {match.breed.shelter_availability_score >= 7 && (
+        <View style={styles.shelterBadge}>
+          <Text style={styles.shelterBadgeText}>
+            🏠 Commonly Available in Shelters
+          </Text>
+        </View>
+      )}
 
       {/* Breed Image with Favorite Button Overlay */}
       <View style={styles.imageContainer}>
@@ -192,6 +208,7 @@ export default function ResultsScreen() {
       role: params.role as string || 'Any',
       seniorFriendly: params.seniorFriendly === 'null' ? null : params.seniorFriendly === 'true',
       specialNeedsOk: params.specialNeedsOk === 'null' ? null : params.specialNeedsOk === 'true',
+      prioritizeAdoptable: params.prioritizeAdoptable === 'true',
     };
     setPreferences(parsedPreferences);
   }, []); // Empty dependency array - only run once
@@ -282,6 +299,21 @@ export default function ResultsScreen() {
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
         <Text style={styles.title}>Your Perfect Matches</Text>
         <Text style={styles.subtitle}>Top {matches.length} breeds based on your preferences</Text>
+        
+        <View style={styles.adoptionMessage}>
+          <Text style={styles.adoptionMessageText}>
+            Most dogs in shelters aren't purebred — but many share the same traits, temperament, and charm as the breeds you're seeing here.
+          </Text>
+          <Text style={styles.adoptionMessageText}>
+            Look for mixes of these breeds when you adopt — they often have the best of both worlds and just as much love to give.
+          </Text>
+          <Text style={styles.adoptionMessageText}>
+            Your perfect match might be a little more unique — and that's a beautiful thing.
+          </Text>
+          <Text style={styles.adoptionMessageText}>
+            💡 <Text style={styles.adoptionMessageHighlight}>Results are prioritized to show commonly available shelter dogs first!</Text>
+          </Text>
+        </View>
 
         {matches.map((match, index) => (
           <BreedMatchCard 
@@ -374,6 +406,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     marginVertical: 10,
+  },
+  adoptionMessage: {
+    marginBottom: 25,
+    padding: 16,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: Colors.light.primaryTeal,
+    width: '100%',
+    maxWidth: 400,
+  },
+  adoptionMessageText: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: Colors.light.textCharcoal,
+    marginBottom: 12,
+    textAlign: 'center',
   },
   matchCard: {
     width: '100%',
@@ -606,5 +655,34 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
     textAlign: 'center',
+  },
+  shelterBadge: {
+    backgroundColor: Colors.light.successGreen,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+    alignSelf: 'center',
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: Colors.light.primaryTeal,
+  },
+  shelterBadgeText: {
+    color: Colors.light.textCharcoal,
+    fontSize: 12,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  scoreContainer: {
+    alignItems: 'flex-end',
+  },
+  shelterScore: {
+    fontSize: 12,
+    color: Colors.light.primaryTeal,
+    fontWeight: '500',
+    marginTop: 2,
+  },
+  adoptionMessageHighlight: {
+    fontWeight: '600',
+    color: Colors.light.primaryTeal,
   },
 }); 

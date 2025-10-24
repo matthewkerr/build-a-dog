@@ -130,6 +130,7 @@ export default function TabOneScreen() {
       params.append('role', preferences.role);
       params.append('seniorFriendly', preferences.seniorFriendly === null ? 'null' : preferences.seniorFriendly.toString());
       params.append('specialNeedsOk', preferences.specialNeedsOk === null ? 'null' : preferences.specialNeedsOk.toString());
+      params.append('prioritizeAdoptable', preferences.prioritizeAdoptable.toString());
       
       router.push(`/results?${params.toString()}`);
     } catch (error) {
@@ -288,6 +289,33 @@ export default function TabOneScreen() {
                 { label: "Any", value: "Any" }
               ]}
             />
+          </View>
+
+          {/* Prioritize Adoptable Breeds */}
+          <View style={styles.questionContainer}>
+            <Text style={styles.questionTitle}>Prioritize breeds commonly found in shelters?</Text>
+            <Text style={styles.questionSubtitle}>
+              This will show breeds that are easier to find for adoption at the top of your results
+            </Text>
+            <View style={styles.toggleContainer}>
+              <Pressable
+                style={[
+                  styles.toggleOption,
+                  preferences.prioritizeAdoptable && styles.toggleOptionSelected
+                ]}
+                onPress={() => setPreferences(prev => ({ 
+                  ...prev, 
+                  prioritizeAdoptable: !prev.prioritizeAdoptable 
+                }))}
+              >
+                <Text style={[
+                  styles.toggleText,
+                  preferences.prioritizeAdoptable && styles.toggleTextSelected
+                ]}>
+                  {preferences.prioritizeAdoptable ? '✅ Yes, prioritize adoptable' : '❌ No, show all breeds equally'}
+                </Text>
+              </Pressable>
+            </View>
           </View>
 
           <View style={styles.buttonContainer}>
@@ -460,6 +488,41 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     marginVertical: 10,
+  },
+  questionSubtitle: {
+    fontSize: 14,
+    color: Colors.light.textCharcoal,
+    textAlign: 'center',
+    marginBottom: 15,
+    lineHeight: 20,
+  },
+  toggleContainer: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  toggleOption: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: Colors.light.secondarySand,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: Colors.light.primaryTeal,
+    minWidth: 250,
+    alignItems: 'center',
+  },
+  toggleOptionSelected: {
+    backgroundColor: Colors.light.primaryTeal,
+    borderColor: Colors.light.primaryTeal,
+  },
+  toggleText: {
+    fontSize: 16,
+    color: Colors.light.textCharcoal,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  toggleTextSelected: {
+    color: 'white',
+    fontWeight: '600',
   },
 
 }); 
