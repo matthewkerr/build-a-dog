@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { DatabaseProvider, useDatabaseContext } from '@/contexts/DatabaseContext';
+import { BreedsProvider } from '@/contexts/BreedsContext';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import Colors from '@/constants/Colors';
@@ -85,7 +86,7 @@ function AppContent() {
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="modal" options={{ presentation: 'modal', headerShown: false }} />
       <Stack.Screen name="results" options={{ headerShown: true }} />
-      <Stack.Screen name="breed-detail" options={{ headerShown: false }} />
+      <Stack.Screen name="flow" options={{ headerShown: false }} />
     </Stack>
   );
 }
@@ -97,9 +98,11 @@ function RootLayoutNav() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <DatabaseProvider>
-        <ThemeProvider value={DefaultTheme}>
-          <AppContent />
-        </ThemeProvider>
+        <BreedsProvider>
+          <ThemeProvider value={DefaultTheme}>
+            <AppContent />
+          </ThemeProvider>
+        </BreedsProvider>
       </DatabaseProvider>
     </GestureHandlerRootView>
   );

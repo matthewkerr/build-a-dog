@@ -8,7 +8,7 @@ import Colors from '@/constants/Colors';
 import { useDatabaseContext } from '@/contexts/DatabaseContext';
 import { useBreeds, useFavorites } from '@/hooks/useDatabase';
 import { DogBreed } from '@/database/database';
-import { getBreedImage } from '@/utils/breedImages';
+import { breedImages } from '@/utils/breedImages';
 
 // Function to clean up spacing issues in text
 const cleanTextSpacing = (text: string): string => {
@@ -102,17 +102,19 @@ export default function BreedDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.header}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>← Back</Text>
-        </Pressable>
-        <View style={styles.titleContainer}>
-          <Text style={styles.headerTitle}>{selectedBreed.breed}</Text>
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+          <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Text style={styles.backButtonText}>← Back</Text>
+          </Pressable>
+          <View style={styles.titleContainer}>
+            <Text style={styles.headerTitle}>{selectedBreed.breed}</Text>
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
       
-      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.container}>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
         <View style={styles.breedCard}>
           <View style={styles.breedHeader}>
             <Text style={styles.breedName}>{selectedBreed.breed}</Text>
@@ -128,20 +130,12 @@ export default function BreedDetailScreen() {
 
           {/* Breed Image */}
           <View style={styles.imageContainer}>
-            {getBreedImage(selectedBreed.image_filename, selectedBreed.breed) ? (
-              <View style={styles.imageWrapper}>
-                <Image 
-                  source={getBreedImage(selectedBreed.image_filename, selectedBreed.breed)!}
-                  style={styles.breedImage}
-                  resizeMode="cover"
-                />
-              </View>
-            ) : (
-              <View style={styles.placeholderImage}>
-                <Text style={styles.placeholderText}>🐕</Text>
-                <Text style={styles.placeholderSubtext}>{selectedBreed.breed}</Text>
-              </View>
-            )}
+            <Image 
+              source={breedImages[selectedBreed.breed.toLowerCase()] || require('@/assets/images/breeds_resized/akita.png')}
+              style={styles.breedImage}
+              resizeMode="cover"
+              fadeDuration={0}
+            />
           </View>
 
 
@@ -201,11 +195,18 @@ export default function BreedDetailScreen() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.light.backgroundIvory,
+  },
+  safeArea: {
+    backgroundColor: Colors.light.backgroundIvory,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -215,15 +216,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.backgroundIvory,
     borderBottomWidth: 1,
     borderBottomColor: Colors.light.secondarySand,
-    zIndex: 1,
+    zIndex: 10,
+    elevation: 10,
+    minHeight: 60,
   },
   backButton: {
-    padding: 8,
+    padding: 12,
+    backgroundColor: 'rgba(76, 181, 171, 0.1)',
+    borderRadius: 8,
+    zIndex: 11,
+    elevation: 11,
   },
   backButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.light.primaryTeal,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   titleContainer: {
     position: 'absolute',
@@ -241,11 +248,10 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
   },
-  container: {
+  scrollContent: {
     alignItems: 'center',
     padding: 20,
     paddingBottom: 40,
-    backgroundColor: Colors.light.backgroundIvory,
   },
   title: {
     fontSize: 24,
@@ -325,14 +331,18 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     marginBottom: 20,
+    width: '100%',
   },
   imageWrapper: {
     position: 'relative',
+    width: '100%',
+    maxWidth: 350,
   },
   breedImage: {
-    width: 350,
+    width: '100%',
     height: 300,
     borderRadius: 16,
+    backgroundColor: Colors.light.secondarySand,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -343,7 +353,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   placeholderImage: {
-    width: 350,
+    width: '100%',
     height: 300,
     borderRadius: 16,
     backgroundColor: Colors.light.secondarySand,

@@ -91,6 +91,13 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <TabBarIcon name="info-circle" color={color} />,
           }}
         />
+        <Tabs.Screen
+          name="flow"
+          options={{
+            title: 'Flow',
+            tabBarIcon: ({ color }) => <TabBarIcon name="random" color={color} />,
+          }}
+        />
     </Tabs>
   );
 }

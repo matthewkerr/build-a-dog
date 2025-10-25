@@ -327,7 +327,7 @@ export default function TabOneScreen() {
               {isMatching ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text style={styles.findButtonText}>🎯 Find My Perfect Match</Text>
+                <Text style={styles.findButtonText}>🎯 Find My Furvana</Text>
               )}
             </Pressable>
 
