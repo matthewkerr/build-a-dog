@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     width: 240,
     height: 240,
     marginBottom: 20,
+    borderRadius: 48, // Rounded corners (20% of width)
   },
   loadingText: {
     fontSize: 18,

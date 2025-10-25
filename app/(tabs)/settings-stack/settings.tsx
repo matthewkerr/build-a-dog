@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Pressable, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Alert, ScrollView, ActivityIndicator, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-// import * as FileSystem from 'expo-file-system';
-// import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import { useDatabaseContext } from '@/contexts/DatabaseContext';
 import { useFavorites } from '@/hooks/useDatabase';
 import Colors from '@/constants/Colors';
@@ -17,60 +17,63 @@ export default function SettingsScreen() {
   const [isResetting, setIsResetting] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
-  // const handleSaveFavorites = async () => {
-  //   try {
-  //     setIsSaving(true);
+  const handleSaveFavorites = async () => {
+    try {
+      setIsSaving(true);
       
-  //     if (!favorites || favorites.length === 0) {
-  //       Alert.alert('No Favorites', 'You don\'t have any favorites to save.');
-  //       return;
-  //     }
+      if (!favorites || favorites.length === 0) {
+        Alert.alert('No Favorites', 'You don\'t have any favorites to save.');
+        return;
+      }
 
-  //     // Create JSON data
-  //     const favoritesData = {
-  //       exportDate: new Date().toISOString(),
-  //       favoritesCount: favorites.length,
-  //       favorites: favorites.map(fav => ({
-  //         id: fav.id,
-  //         breed: fav.breed,
-  //         size: fav.size,
-  //         energy_level: fav.energy_level,
-  //         good_with_kids: fav.good_with_kids,
-  //         good_with_pets: fav.good_with_pets,
-  //         trainability: fav.trainability,
-  //         grooming_needs: fav.grooming_needs,
-  //         companion_or_guardian: fav.companion_or_guardian,
-  //         senior_friendly: fav.senior_friendly,
-  //         special_needs_possible: fav.special_needs_possible,
-  //         description: fav.description,
-  //         favorited_at: fav.favorited_at
-  //       }))
-  //     };
+      // Create JSON data
+      const favoritesData = {
+        exportDate: new Date().toISOString(),
+        favoritesCount: favorites.length,
+        favorites: favorites.map(fav => ({
+          id: fav.id,
+          breed: fav.breed,
+          size: fav.size,
+          energy_level: fav.energy_level,
+          good_with_kids: fav.good_with_kids,
+          good_with_pets: fav.good_with_pets,
+          trainability: fav.trainability,
+          grooming_needs: fav.grooming_needs,
+          companion_or_guardian: fav.companion_or_guardian,
+          senior_friendly: fav.senior_friendly,
+          special_needs_possible: fav.special_needs_possible,
+          description: fav.description,
+          favorited_at: fav.favorited_at
+        }))
+      };
 
-  //     // Create filename with timestamp
-  //     const timestamp = new Date().toISOString().split('T')[0];
-  //     const filename = `dog-favorites-${timestamp}.json`;
+      // Create filename with timestamp
+      const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `furvana-favorites-${timestamp}.json`;
       
-  //     // Write file to temporary location
-  //     await FileSystem.writeAsStringAsync(filename, JSON.stringify(favoritesData, null, 2));
+      // Create file URI
+      const fileUri = FileSystem.documentDirectory + filename;
+      
+      // Write file to device storage
+      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(favoritesData, null, 2));
 
-  //     // Share the file
-  //     if (await Sharing.isAvailableAsync()) {
-  //       await Sharing.shareAsync(filename, {
-  //         mimeType: 'application/json',
-  //         dialogTitle: 'Save Dog Favorites'
-  //       });
-  //     } else {
-  //       Alert.alert('Success', `Favorites saved to: ${filename}`);
-  //     }
+      // Share the file
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri, {
+          mimeType: 'application/json',
+          dialogTitle: 'Save Furvana Favorites'
+        });
+      } else {
+        Alert.alert('Success', `Favorites saved to: ${filename}`);
+      }
 
-  //   } catch (error) {
-  //     console.error('Error saving favorites:', error);
-  //     Alert.alert('Error', 'Failed to save favorites. Please try again.');
-  //   } finally {
-  //     setIsSaving(false);
-  //   }
-  // };
+    } catch (error) {
+      console.error('Error saving favorites:', error);
+      Alert.alert('Error', 'Failed to save favorites. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleResetDatabase = async () => {
     Alert.alert(
@@ -111,6 +114,54 @@ export default function SettingsScreen() {
     }
   };
 
+  const handleContactSupport = () => {
+    const email = 'hello@matthewkerr.org';
+    const subject = 'Furvana App Support';
+    const body = 'Hi Matthew,\n\nI need help with the Furvana app:\n\n';
+    
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    Linking.openURL(mailtoUrl).catch(() => {
+      Alert.alert('Email Not Available', 'Please email hello@matthewkerr.org directly.');
+    });
+  };
+
+  const handleRateApp = () => {
+    // For iOS App Store
+    const appStoreUrl = 'https://apps.apple.com/app/furvana/id6749653668';
+    
+    Linking.openURL(appStoreUrl).catch(() => {
+      Alert.alert('Rate App', 'Please rate Furvana in the App Store!');
+    });
+  };
+
+  const handleShareApp = async () => {
+    try {
+      const shareText = 'Check out Furvana - the perfect app to find your ideal dog breed! 🐕\n\nFind your perfect canine companion with personalized breed matching.';
+      const shareUrl = 'https://apps.apple.com/app/furvana/id6749653668';
+      
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(shareUrl, {
+          mimeType: 'text/plain',
+          dialogTitle: 'Share Furvana'
+        });
+      } else {
+        Alert.alert('Share Furvana', `${shareText}\n\n${shareUrl}`);
+      }
+    } catch (error) {
+      console.error('Error sharing app:', error);
+      Alert.alert('Error', 'Failed to share app. Please try again.');
+    }
+  };
+
+  const handlePrivacyPolicy = () => {
+    const privacyUrl = 'https://matthewkerr.org/furvana-privacy';
+    Linking.openURL(privacyUrl).catch(() => {
+      Alert.alert('Privacy Policy', 'Please visit matthewkerr.org/furvana-privacy for our privacy policy.');
+    });
+  };
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -120,7 +171,7 @@ export default function SettingsScreen() {
       </View>
       
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
-        {/* <View style={styles.section}>
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>Favorites</Text>
           
           <Pressable 
@@ -141,7 +192,7 @@ export default function SettingsScreen() {
           <Text style={styles.buttonDescription}>
             Export your favorite dog breeds as a JSON file that you can save to your device or share.
           </Text>
-        </View> */}
+        </View>
 
         {__DEV__ && (
           <View style={styles.section}>
@@ -187,9 +238,49 @@ export default function SettingsScreen() {
         )}
 
         <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Support</Text>
+          
+          <Pressable style={styles.button} onPress={handleContactSupport}>
+            <FontAwesome name="envelope" size={20} color="white" style={styles.buttonIcon} />
+            <Text style={styles.buttonText}>Contact Support</Text>
+          </Pressable>
+          
+          <Text style={styles.buttonDescription}>
+            Need help? Email us at hello@matthewkerr.org
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Legal</Text>
+          
+          <Pressable style={styles.button} onPress={handlePrivacyPolicy}>
+            <FontAwesome name="shield" size={20} color="white" style={styles.buttonIcon} />
+            <Text style={styles.buttonText}>Privacy Policy</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Share Furvana</Text>
+          
+          <Pressable style={styles.button} onPress={handleRateApp}>
+            <FontAwesome name="star" size={20} color="white" style={styles.buttonIcon} />
+            <Text style={styles.buttonText}>Rate the App</Text>
+          </Pressable>
+          
+          <Pressable style={styles.button} onPress={handleShareApp}>
+            <FontAwesome name="share" size={20} color="white" style={styles.buttonIcon} />
+            <Text style={styles.buttonText}>Share with Friends</Text>
+          </Pressable>
+          
+          <Text style={styles.buttonDescription}>
+            Help others discover their perfect dog breed match!
+          </Text>
+        </View>
+
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>App Info</Text>
           <Text style={styles.infoText}>
-            Build a Dog - Find your perfect canine companion
+            Furvana - Find your perfect canine companion
           </Text>
           <Text style={styles.infoText}>
             Version: 1.0.0

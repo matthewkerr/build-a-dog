@@ -77,13 +77,6 @@ export default function TabLayout() {
         />
         {/* Hidden stack screens - registered for routing but not visible in tab bar */}
         <Tabs.Screen
-          name="flow-stack"
-          options={{
-            href: null,
-            headerShown: false,
-          }}
-        />
-        <Tabs.Screen
           name="search-stack"
           options={{
             href: null,
