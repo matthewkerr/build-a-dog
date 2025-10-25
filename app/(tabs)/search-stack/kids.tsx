@@ -43,7 +43,7 @@ export default function KidsScreen() {
       >
         <View style={styles.content}>
           <Text style={styles.title}>Do you need a dog that's good with kids?</Text>
-          <Text style={styles.subtitle}>This helps us match you with breeds known for their patience and gentleness with children</Text>
+          <Text style={styles.subtitle}>Every child deserves a furry friend who will protect them, play with them, and grow up alongside them — we'll help you find breeds that are naturally gentle and patient with little ones</Text>
           
           <View style={styles.optionsContainer}>
             {kidsOptions.map((option) => (

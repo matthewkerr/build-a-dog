@@ -39,7 +39,7 @@ export default function EnergyScreen() {
       >
         <View style={styles.content}>
           <Text style={styles.title}>What energy level works for you?</Text>
-          <Text style={styles.subtitle}>Consider your daily activity level and how much exercise you can provide</Text>
+          <Text style={styles.subtitle}>Finding a dog whose energy matches yours creates harmony in your daily life — from peaceful cuddles to adventurous walks, we'll help you find your perfect companion</Text>
           
           <View style={styles.optionsContainer}>
             {energyOptions.map((energy) => (

@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Colors from '@/constants/Colors';
 
 export default function AdoptionScreen() {
   const router = useRouter();
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const handleBackPress = () => {
     router.replace('/');
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      scrollViewRef.current?.scrollTo({ y: 0, animated: false });
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,6 +31,7 @@ export default function AdoptionScreen() {
       </View>
       
       <ScrollView 
+        ref={scrollViewRef}
         style={styles.scrollContainer}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}

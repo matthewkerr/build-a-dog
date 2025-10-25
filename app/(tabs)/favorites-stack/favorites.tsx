@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Text, Pressable, ScrollView, Image, ActivityIndicator, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useDatabaseContext } from '@/contexts/DatabaseContext';
@@ -14,6 +14,7 @@ export default function FavoritesScreen() {
   const { isInitialized } = useDatabaseContext();
   const { favorites, isLoading, toggleFavorite, loadFavorites } = useFavorites();
   const [favoriteBreeds, setFavoriteBreeds] = useState<DogBreed[]>([]);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   useEffect(() => {
     if (isInitialized) {
@@ -29,13 +30,19 @@ export default function FavoritesScreen() {
     }
   }, [favorites]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      scrollViewRef.current?.scrollTo({ y: 0, animated: false });
+    }, [])
+  );
+
   const handleBackPress = () => {
     router.replace('/');
   };
 
   const handleBreedPress = (breed: DogBreed) => {
     router.push({
-      pathname: '/(tabs)/flow-stack/breed-detail-flow',
+      pathname: '/(tabs)/browse-stack/breed-detail-flow',
       params: { breedId: breed.id.toString() }
     });
   };
@@ -57,6 +64,7 @@ export default function FavoritesScreen() {
       </View>
       
       <ScrollView 
+        ref={scrollViewRef}
         style={styles.scrollContainer}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -74,7 +82,7 @@ export default function FavoritesScreen() {
               <Text style={styles.emptyText}>
                 Start browsing dogs and add breeds you love to your favorites!
               </Text>
-              <Pressable style={styles.browseButton} onPress={() => router.push('/(tabs)/flow-stack/browse')}>
+              <Pressable style={styles.browseButton} onPress={() => router.push('/(tabs)/browse-stack/browse')}>
                 <FontAwesome name="search" size={20} color="white" style={styles.browseIcon} />
                 <Text style={styles.browseButtonText}>Browse Dogs</Text>
               </Pressable>

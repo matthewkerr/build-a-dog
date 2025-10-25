@@ -43,7 +43,7 @@ export default function PetsScreen() {
       >
         <View style={styles.content}>
           <Text style={styles.title}>Do you need a dog that's good with other pets?</Text>
-          <Text style={styles.subtitle}>This helps us find breeds that get along well with cats, other dogs, or other animals</Text>
+          <Text style={styles.subtitle}>If you already have pets at home, we want to make sure everyone can live together happily — finding a dog who'll fit seamlessly into your furry family</Text>
           
           <View style={styles.optionsContainer}>
             {petsOptions.map((option) => (

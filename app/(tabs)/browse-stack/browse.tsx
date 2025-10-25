@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { StyleSheet, View, Text, Pressable, Alert, Image, Dimensions, VirtualizedList } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useBreedsContext } from '@/contexts/BreedsContext';
@@ -11,6 +11,7 @@ export default function FlowBrowseScreen() {
   const router = useRouter();
   const { breeds } = useBreedsContext();
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const listRef = useRef<VirtualizedList<any>>(null);
 
   const screenWidth = Dimensions.get('window').width;
   const imageSize = screenWidth - 40; // Account for padding
@@ -21,6 +22,12 @@ export default function FlowBrowseScreen() {
   // VirtualizedList helper functions
   const getItemCount = () => memoizedBreeds.length;
   const getItem = (data: any, index: number) => memoizedBreeds[index];
+
+  useFocusEffect(
+    React.useCallback(() => {
+      listRef.current?.scrollToIndex({ index: 0, animated: false });
+    }, [])
+  );
 
   const handleBackPress = () => {
     // Navigate back to the main flow page (index)
@@ -64,6 +71,7 @@ export default function FlowBrowseScreen() {
         <Text style={styles.subtitle}>Explore all available dog breeds</Text>
         
         <VirtualizedList
+          ref={listRef}
           data={memoizedBreeds}
           initialNumToRender={5}
           maxToRenderPerBatch={5}

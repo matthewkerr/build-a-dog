@@ -38,8 +38,15 @@ export default function SizeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.content}>
+          <View style={styles.introMessage}>
+            <Text style={styles.introTitle}>Finding Your Perfect Match</Text>
+            <Text style={styles.introText}>
+              Every dog deserves a home where they'll thrive. The questions you're about to answer help us understand your lifestyle, your space, and your heart — so we can connect you with breeds that match not just what you need, but who you are.
+            </Text>
+          </View>
+
           <Text style={styles.title}>What size dog are you looking for?</Text>
-          <Text style={styles.subtitle}>This helps us find breeds that fit your living space and lifestyle</Text>
+          <Text style={styles.subtitle}>Whether you live in a cozy apartment or have acres to roam, every dog deserves a home where they can thrive and feel comfortable in their space</Text>
           
           <View style={styles.optionsContainer}>
             {sizeOptions.map((size) => (
@@ -113,6 +120,34 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+  },
+  introMessage: {
+    marginBottom: 30,
+    padding: 20,
+    backgroundColor: Colors.light.backgroundIvory,
+    borderWidth: 2,
+    borderColor: Colors.light.primaryTeal,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  introTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: Colors.light.primaryTeal,
+    lineHeight: 28,
+    textAlign: 'center',
+  },
+  introText: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 12,
+    color: Colors.light.textCharcoal,
+    textAlign: 'center',
   },
   title: {
     fontSize: 24,

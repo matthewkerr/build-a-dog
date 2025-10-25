@@ -39,7 +39,7 @@ export default function GroomingScreen() {
       >
         <View style={styles.content}>
           <Text style={styles.title}>How much grooming are you comfortable with?</Text>
-          <Text style={styles.subtitle}>Consider your time and budget for regular brushing, bathing, and professional grooming</Text>
+          <Text style={styles.subtitle}>Every dog needs care, but some need more attention than others — let's find breeds that fit your lifestyle and time, so you can focus on what matters most: loving your dog</Text>
           
           <View style={styles.optionsContainer}>
             {groomingOptions.map((grooming) => (
