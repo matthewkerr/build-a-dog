@@ -19,8 +19,18 @@ export default function FlowBrowseScreen() {
   const screenWidth = Dimensions.get('window').width;
   const imageSize = screenWidth - 40; // Account for padding
 
+  // Hidden breeds list - breeds to exclude from all results
+  const hiddenBreeds = [
+    'cirneco dell\'etna',
+  ];
+
+  // Filter out hidden breeds
+  const visibleBreeds = breeds.filter(breed => 
+    !hiddenBreeds.includes(breed.breed.toLowerCase())
+  );
+
   // Memoize the breeds to prevent unnecessary re-renders
-  const memoizedBreeds = useMemo(() => breeds, [breeds]);
+  const memoizedBreeds = useMemo(() => visibleBreeds, [visibleBreeds]);
 
   // VirtualizedList helper functions
   const getItemCount = () => memoizedBreeds.length;

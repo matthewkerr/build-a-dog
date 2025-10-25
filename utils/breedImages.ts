@@ -164,6 +164,24 @@ export const breedImages: { [key: string]: any } = {
   'xoloitzcuintli': require('@/assets/images/breeds_resized/xoloitzcuintli.png'),
   'yorkipoo': require('@/assets/images/breeds_resized/yorkipoo.png'),
   'yorkshire terrier': require('@/assets/images/breeds_resized/yorkshire_terrier.png'),
+  // Missing breeds that were added
+  'feist': require('@/assets/images/breeds_resized/feist.png'),
+  'french spaniel': require('@/assets/images/breeds_resized/french_spaniel.png'),
+  'frenchton': require('@/assets/images/breeds_resized/frenchton.png'),
+  'glen of imaal terrier': require('@/assets/images/breeds_resized/glen_of_imaal_terrier.png'),
+  'havapoo': require('@/assets/images/breeds_resized/havapoo.png'),
+  'huskydoodle': require('@/assets/images/breeds_resized/huskydoodle.png'),
+  'japanese spitz': require('@/assets/images/breeds_resized/japanese_spitz.png'),
+  'japanese terrier': require('@/assets/images/breeds_resized/japanese_terrier.png'),
+  'miniature poodle': require('@/assets/images/breeds_resized/miniature_poodle.png'),
+  'morkie': require('@/assets/images/breeds_resized/morkie.png'),
+  'mountain cur': require('@/assets/images/breeds_resized/mountain_cur.png'),
+  'newfypoo': require('@/assets/images/breeds_resized/newfypoo.png'),
+  'peekapoo': require('@/assets/images/breeds_resized/peekapoo.png'),
+  'petit basset griffon vendéen': require('@/assets/images/breeds_resized/petit_basset_griffon_vendéen.png'),
+  'pitsky': require('@/assets/images/breeds_resized/pitsky.png'),
+  'pomsky': require('@/assets/images/breeds_resized/pomsky.png'),
+  'portuguese podengo': require('@/assets/images/breeds_resized/portuguese_podengo.png'),
 };
 
 // Function to get breed image with error handling

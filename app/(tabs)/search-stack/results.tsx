@@ -10,6 +10,29 @@ import { useBreedMatcher } from '@/hooks/useBreedMatcher';
 import { useDatabaseContext } from '@/contexts/DatabaseContext';
 import Colors from '@/constants/Colors';
 
+// List of common shelter dog breeds from TOP_AVAILABLE DOGS_SHELTER.md
+const COMMON_SHELTER_BREEDS = [
+  'American Pit Bull Terrier',
+  'Labrador Retriever',
+  'German Shepherd',
+  'Boxer',
+  'American Staffordshire Terrier',
+  'Staffordshire Bull Terrier',
+  'American Bulldog',
+  'Beagle',
+  'Australian Shepherd',
+  'Australian Cattle Dog',
+  'Border Collie',
+  'Golden Retriever',
+  'Rottweiler',
+  'Doberman Pinscher',
+  'Chihuahua',
+  'Dachshund',
+  'Jack Russell Terrier',
+  'Yorkshire Terrier',
+  'Boston Terrier',
+];
+
 export default function FlowResultsScreen() {
   const router = useRouter();
   const { preferences, resetPreferences } = useFlow();
@@ -185,7 +208,7 @@ export default function FlowResultsScreen() {
                         <View style={styles.breedInfo}>
                           <Text style={styles.breedName}>{breed.breed || 'Unknown Breed'}</Text>
                           
-                          {breed.shelter_availability_score >= 8 && (
+                          {COMMON_SHELTER_BREEDS.includes(breed.breed) && (
                             <Text style={styles.shelterBadge}>🏠 Common in Shelters</Text>
                           )}
                           
@@ -211,6 +234,17 @@ export default function FlowResultsScreen() {
               </View>
             </View>
           )}
+          
+          {/* Search Again Button at Bottom */}
+          <View style={styles.bottomButtonContainer}>
+            <Pressable 
+              style={styles.searchAgainButton} 
+              onPress={() => router.push('/(tabs)/search-stack/size')}
+            >
+              <FontAwesome name="search" size={20} color="white" style={styles.searchAgainIcon} />
+              <Text style={styles.searchAgainText}>Search Again</Text>
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -453,11 +487,16 @@ const styles = StyleSheet.create({
   searchAgainIcon: {
     marginRight: 12,
   },
-  searchAgainButtonText: {
+  searchAgainText: {
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
     letterSpacing: 0.5,
+  },
+  bottomButtonContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    backgroundColor: Colors.light.backgroundIvory,
   },
 });

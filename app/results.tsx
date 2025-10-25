@@ -10,6 +10,29 @@ import { useBreeds } from '@/hooks/useDatabase';
 import { useBreedMatcher, BreedMatch, UserPreferences } from '@/hooks/useBreedMatcher';
 import { getBreedImage } from '@/utils/breedImages';
 
+// List of common shelter dog breeds from TOP_AVAILABLE DOGS_SHELTER.md
+const COMMON_SHELTER_BREEDS = [
+  'American Pit Bull Terrier',
+  'Labrador Retriever',
+  'German Shepherd',
+  'Boxer',
+  'American Staffordshire Terrier',
+  'Staffordshire Bull Terrier',
+  'American Bulldog',
+  'Beagle',
+  'Australian Shepherd',
+  'Australian Cattle Dog',
+  'Border Collie',
+  'Golden Retriever',
+  'Rottweiler',
+  'Doberman Pinscher',
+  'Chihuahua',
+  'Dachshund',
+  'Jack Russell Terrier',
+  'Yorkshire Terrier',
+  'Boston Terrier',
+];
+
 // Function to clean up spacing issues in text
 const cleanTextSpacing = (text: string): string => {
   if (!text) return '';
@@ -68,7 +91,7 @@ function BreedMatchCard({ match, index, onImagePress }: BreedMatchCardProps) {
         <Text style={styles.matchName}>{match.breed.breed}</Text>
         <View style={styles.scoreContainer}>
           <Text style={styles.matchScore}>{match.score}% match</Text>
-          {match.breed.shelter_availability_score >= 7 && (
+          {COMMON_SHELTER_BREEDS.includes(match.breed.breed) && (
             <Text style={styles.shelterScore}>
               🏠 Shelter Score: {match.breed.shelter_availability_score}/10
             </Text>
@@ -77,7 +100,7 @@ function BreedMatchCard({ match, index, onImagePress }: BreedMatchCardProps) {
       </View>
       
       {/* Shelter Availability Badge */}
-      {match.breed.shelter_availability_score >= 7 && (
+      {COMMON_SHELTER_BREEDS.includes(match.breed.breed) && (
         <View style={styles.shelterBadge}>
           <Text style={styles.shelterBadgeText}>
             🏠 Commonly Available in Shelters

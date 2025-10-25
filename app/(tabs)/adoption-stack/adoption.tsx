@@ -107,7 +107,7 @@ export default function AdoptionScreen() {
             </Text>
           </View>
 
-          {/* Section 6 */}
+          {/* Section 6
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>The Gentle Wisdom of Senior Dogs</Text>
             <Text style={styles.sectionText}>
@@ -151,7 +151,7 @@ export default function AdoptionScreen() {
             <Text style={styles.sectionText}>
               They may have fewer years ahead, but they'll fill them — and your heart — with love, loyalty, and gratitude that never fades.
             </Text>
-          </View>
+          </View> */}
 
           {/* Section 7 */}
           <View style={styles.section}>

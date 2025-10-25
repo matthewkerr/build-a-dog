@@ -10,6 +10,29 @@ import { useBreedMatcher } from '@/hooks/useBreedMatcher';
 import { useDatabaseContext } from '@/contexts/DatabaseContext';
 import Colors from '@/constants/Colors';
 
+// List of common shelter dog breeds from TOP_AVAILABLE DOGS_SHELTER.md
+const COMMON_SHELTER_BREEDS = [
+  'American Pit Bull Terrier',
+  'Labrador Retriever',
+  'German Shepherd',
+  'Boxer',
+  'American Staffordshire Terrier',
+  'Staffordshire Bull Terrier',
+  'American Bulldog',
+  'Beagle',
+  'Australian Shepherd',
+  'Australian Cattle Dog',
+  'Border Collie',
+  'Golden Retriever',
+  'Rottweiler',
+  'Doberman Pinscher',
+  'Chihuahua',
+  'Dachshund',
+  'Jack Russell Terrier',
+  'Yorkshire Terrier',
+  'Boston Terrier',
+];
+
 export default function FlowResultsScreen() {
   const router = useRouter();
   const { preferences } = useFlow();
@@ -177,7 +200,7 @@ export default function FlowResultsScreen() {
                         <View style={styles.breedInfo}>
                           <Text style={styles.breedName}>{breed.breed || 'Unknown Breed'}</Text>
                           
-                          {breed.shelter_availability_score >= 8 && (
+                          {COMMON_SHELTER_BREEDS.includes(breed.breed) && (
                             <Text style={styles.shelterBadge}>🏠 Common in Shelters</Text>
                           )}
                           

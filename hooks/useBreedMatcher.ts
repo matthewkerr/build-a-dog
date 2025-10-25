@@ -234,8 +234,20 @@ export const useBreedMatcher = () => {
     try {
       console.log('🔍 Starting breed matching with', breeds.length, 'breeds');
       
-      // Calculate scores for all breeds
-      const scoredBreeds = breeds.map(breed => calculateBreedScore(breed, preferences));
+      // Hidden breeds list - breeds to exclude from all results
+      const hiddenBreeds = [
+        'cirneco dell\'etna',
+      ];
+      
+      // Filter out hidden breeds
+      const visibleBreeds = breeds.filter(breed => 
+        !hiddenBreeds.includes(breed.breed.toLowerCase())
+      );
+      
+      console.log(`🚫 Filtered out ${breeds.length - visibleBreeds.length} hidden breeds`);
+      
+      // Calculate scores for all visible breeds
+      const scoredBreeds = visibleBreeds.map(breed => calculateBreedScore(breed, preferences));
       
       // Create a combined scoring system that balances match score with shelter availability
       const scoredBreedsWithCombinedScore = scoredBreeds.map(match => {

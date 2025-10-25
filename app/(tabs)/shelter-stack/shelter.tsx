@@ -41,9 +41,17 @@ export default function ShelterScreen() {
   const screenWidth = Dimensions.get('window').width;
   const imageSize = screenWidth - 40; // Account for padding
 
-  // Filter breeds to only show common shelter dogs
+  // Hidden breeds list - breeds to exclude from all results
+  const hiddenBreeds = [
+    'cirneco dell\'etna',
+  ];
+
+  // Filter breeds to only show common shelter dogs, excluding hidden breeds
   const shelterBreeds = useMemo(() => {
-    return breeds.filter(breed => COMMON_SHELTER_BREEDS.includes(breed.breed));
+    return breeds.filter(breed => 
+      COMMON_SHELTER_BREEDS.includes(breed.breed) && 
+      !hiddenBreeds.includes(breed.breed.toLowerCase())
+    );
   }, [breeds]);
 
   useEffect(() => {
