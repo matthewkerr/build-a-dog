@@ -31,9 +31,18 @@ export default function FlowScreen() {
     router.push('/(tabs)/tips-stack/tips');
   };
 
+  const handleShelterPress = () => {
+    router.push('/(tabs)/shelter-stack/shelter');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+        <Pressable style={styles.button} onPress={handleShelterPress}>
+          <FontAwesome name="home" size={24} color="white" style={styles.icon} />
+          <Text style={styles.buttonText}>Common Shelter Dogs</Text>
+        </Pressable>
+
         <Pressable style={styles.button} onPress={handleSearchPress}>
           <FontAwesome name="paw" size={24} color="white" style={styles.icon} />
           <Text style={styles.buttonText}>Search for my match</Text>

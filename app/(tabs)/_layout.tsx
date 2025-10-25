@@ -113,6 +113,13 @@ export default function TabLayout() {
             headerShown: false,
           }}
         />
+        <Tabs.Screen
+          name="shelter-stack"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
     </Tabs>
   );
 }
