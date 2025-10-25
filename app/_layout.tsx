@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Image } from 'react-native';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { DatabaseProvider, useDatabaseContext } from '@/contexts/DatabaseContext';
@@ -54,8 +55,13 @@ export default function RootLayout() {
 function LoadingScreen() {
   return (
     <View style={styles.loadingContainer}>
+      <Image 
+        source={require('../assets/images/icon.png')} 
+        style={styles.loadingIcon}
+        resizeMode="contain"
+      />
       <ActivityIndicator size="large" color={Colors.light.primaryTeal} />
-      <Text style={styles.loadingText}>Loading Build-a-Dog...</Text>
+      <Text style={styles.loadingText}>Loading Furvana...</Text>
     </View>
   );
 }
@@ -113,6 +119,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.light.backgroundIvory,
+  },
+  loadingIcon: {
+    width: 240,
+    height: 240,
+    marginBottom: 20,
   },
   loadingText: {
     fontSize: 18,

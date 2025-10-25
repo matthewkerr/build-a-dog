@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 
-export default function FavoritesLayout() {
+export default function SeniorLayout() {
   return (
     <Stack
       screenOptions={{
@@ -9,13 +9,7 @@ export default function FavoritesLayout() {
       }}
     >
       <Stack.Screen 
-        name="favorites" 
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen 
-        name="breed-detail-flow" 
+        name="senior" 
         options={{
           headerShown: false,
         }}

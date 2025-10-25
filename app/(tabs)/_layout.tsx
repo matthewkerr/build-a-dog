@@ -43,33 +43,38 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerShown: false,
         }}
-        // options={{
-        //   title: 'Find Match',
-        //   tabBarIcon: ({ color }) => <TabBarIcon name="magic" color={color} />,
-        //   headerRight: () => (
-        //     <Link href="/modal" asChild>
-        //       <Pressable>
-        //         {({ pressed }) => (
-        //           <FontAwesome
-        //             name="info-circle"
-        //             size={25}
-        //             color={Colors.light.textCharcoal}
-        //             style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-        //           />
-        //         )}
-        //       </Pressable>
-        //     </Link>
-        //   ),
-        // }}
       />
         <Tabs.Screen
+          name="favorites-stack"
+          options={{
+            title: 'Favorites',
+            tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
+            headerShown: false,
+          }}
+        />
+         <Tabs.Screen
           name="about"
           options={{
             title: 'About',
             tabBarIcon: ({ color }) => <TabBarIcon name="info-circle" color={color} />,
           }}
         />
-       
+        <Tabs.Screen
+          name="tips-stack"
+          options={{
+            title: 'Tips',
+            tabBarIcon: ({ color }) => <TabBarIcon name="lightbulb-o" color={color} />,
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="settings-stack"
+          options={{
+            title: 'Settings',
+            tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
+            headerShown: false,
+          }}
+        />
         {/* Hidden stack screens - registered for routing but not visible in tab bar */}
         <Tabs.Screen
           name="flow-stack"
@@ -93,13 +98,6 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="favorites-stack"
-          options={{
-            href: null,
-            headerShown: false,
-          }}
-        />
-        <Tabs.Screen
           name="adoption-stack"
           options={{
             href: null,
@@ -107,14 +105,14 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="tips-stack"
+          name="shelter-stack"
           options={{
             href: null,
             headerShown: false,
           }}
         />
         <Tabs.Screen
-          name="shelter-stack"
+          name="senior-stack"
           options={{
             href: null,
             headerShown: false,

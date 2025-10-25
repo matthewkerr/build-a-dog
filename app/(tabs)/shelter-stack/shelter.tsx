@@ -4,6 +4,8 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useBreedsContext } from '@/contexts/BreedsContext';
+import { useDatabaseContext } from '@/contexts/DatabaseContext';
+import { useFavorites } from '@/hooks/useDatabase';
 import { breedImages } from '@/utils/breedImages';
 import Colors from '@/constants/Colors';
 
@@ -33,7 +35,8 @@ const COMMON_SHELTER_BREEDS = [
 export default function ShelterScreen() {
   const router = useRouter();
   const { breeds } = useBreedsContext();
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const { isInitialized } = useDatabaseContext();
+  const { isFavorite, toggleFavorite, loadFavorites } = useFavorites();
 
   const screenWidth = Dimensions.get('window').width;
   const imageSize = screenWidth - 40; // Account for padding
@@ -42,6 +45,12 @@ export default function ShelterScreen() {
   const shelterBreeds = useMemo(() => {
     return breeds.filter(breed => COMMON_SHELTER_BREEDS.includes(breed.breed));
   }, [breeds]);
+
+  useEffect(() => {
+    if (isInitialized) {
+      loadFavorites();
+    }
+  }, [isInitialized]);
 
   const handleBackPress = () => {
     router.replace('/');
@@ -54,18 +63,18 @@ export default function ShelterScreen() {
     });
   };
 
-  const handleFavoritePress = (breed: any) => {
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(breed.id)) {
-        newFavorites.delete(breed.id);
+  const handleFavoritePress = async (breed: any) => {
+    try {
+      await toggleFavorite(breed.id);
+      if (isFavorite(breed.id)) {
         Alert.alert('Favorite Removed', `${breed.breed} has been removed from your favorites!`);
       } else {
-        newFavorites.add(breed.id);
         Alert.alert('Favorite Added', `${breed.breed} has been added to your favorites!`);
       }
-      return newFavorites;
-    });
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      Alert.alert('Error', 'Failed to update favorite. Please try again.');
+    }
   };
 
   return (
@@ -88,11 +97,11 @@ export default function ShelterScreen() {
               style={styles.favoriteButton}
               onPress={() => handleFavoritePress(breed)}
             >
-              <FontAwesome 
-                name={favorites.has(breed.id) ? "heart" : "heart-o"} 
-                size={20} 
-                color={Colors.light.heartRed} 
-              />
+                <FontAwesome 
+                  name={isFavorite(breed.id) ? "heart" : "heart-o"} 
+                  size={20} 
+                  color={Colors.light.heartRed} 
+                />
             </Pressable>
             
             <Pressable
@@ -194,12 +203,16 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.light.secondarySand,
   },
   backButton: {
-    padding: 8,
+    padding: 12,
+    backgroundColor: 'rgba(76, 181, 171, 0.1)',
+    borderRadius: 8,
+    zIndex: 11,
+    elevation: 11,
   },
   backButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.light.primaryTeal,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   titleContainer: {
     position: 'absolute',

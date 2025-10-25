@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { StyleSheet, View, Pressable, Text, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useBreedsContext } from '@/contexts/BreedsContext';
@@ -35,17 +35,33 @@ export default function FlowScreen() {
     router.push('/(tabs)/shelter-stack/shelter');
   };
 
+  const handleSeniorPress = () => {
+    router.push('/(tabs)/senior-stack/senior');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+        <Image 
+          source={require('../../assets/images/icon.png')} 
+          style={styles.headerIcon}
+          resizeMode="contain"
+        />
+        
+        <Pressable style={styles.button} onPress={handleSearchPress}>
+        <FontAwesome 
+            name="search" 
+            size={24} 
+            color={breedsLoading ? "rgba(255, 255, 255, 0.6)" : "white"} 
+            style={styles.icon} 
+          />
+       
+          <Text style={styles.buttonText}>Search for my match</Text>
+        </Pressable>
+
         <Pressable style={styles.button} onPress={handleShelterPress}>
           <FontAwesome name="home" size={24} color="white" style={styles.icon} />
           <Text style={styles.buttonText}>Common Shelter Dogs</Text>
-        </Pressable>
-
-        <Pressable style={styles.button} onPress={handleSearchPress}>
-          <FontAwesome name="paw" size={24} color="white" style={styles.icon} />
-          <Text style={styles.buttonText}>Search for my match</Text>
         </Pressable>
         
         <Pressable 
@@ -53,20 +69,15 @@ export default function FlowScreen() {
           onPress={handleBrowsePress}
           disabled={breedsLoading}
         >
-          <FontAwesome 
-            name="search" 
-            size={24} 
-            color={breedsLoading ? "rgba(255, 255, 255, 0.6)" : "white"} 
-            style={styles.icon} 
-          />
+             <FontAwesome name="paw" size={24} color="white" style={styles.icon} />
           <Text style={[styles.buttonText, breedsLoading && styles.disabledButtonText]}>
             {breedsLoading ? 'Loading breeds...' : 'Browse for my match'}
           </Text>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={handleFavoritesPress}>
+        <Pressable style={styles.button} onPress={handleSeniorPress}>
           <FontAwesome name="heart" size={24} color="white" style={styles.icon} />
-          <Text style={styles.buttonText}>View Favorites</Text>
+          <Text style={styles.buttonText}>Adopt a Senior Dog</Text>
         </Pressable>
 
         <Pressable style={styles.button} onPress={handleAdoptionPress}>
@@ -74,10 +85,10 @@ export default function FlowScreen() {
           <Text style={styles.buttonText}>Why Adopt</Text>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={handleTipsPress}>
+        {/* <Pressable style={styles.button} onPress={handleTipsPress}>
           <FontAwesome name="lightbulb-o" size={24} color="white" style={styles.icon} />
           <Text style={styles.buttonText}>Furvana Tips</Text>
-        </Pressable>
+        </Pressable> */}
       </View>
     </View>
   );
@@ -94,6 +105,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     gap: 20,
+  },
+  headerIcon: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
   },
   button: {
     backgroundColor: Colors.light.primaryTeal,

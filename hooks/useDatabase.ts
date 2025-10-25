@@ -24,11 +24,23 @@ export function useDatabase() {
     }
   };
 
+  const resetDatabase = useCallback(async () => {
+    try {
+      setError(null);
+      await databaseManager.resetDatabase();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to reset database');
+      console.error('Error resetting database:', err);
+      throw err;
+    }
+  }, []);
+
   return {
     isInitialized,
     isLoading,
     error,
-    databaseManager
+    databaseManager,
+    resetDatabase
   };
 }
 
@@ -80,7 +92,7 @@ export function useFavorites() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadFavorites = async () => {
+  const loadFavorites = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -96,9 +108,9 @@ export function useFavorites() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const addToFavorites = async (breedId: number) => {
+  const addToFavorites = useCallback(async (breedId: number) => {
     try {
       setError(null);
       await databaseManager.addToFavorites(breedId);
@@ -108,9 +120,9 @@ export function useFavorites() {
       console.error('Error adding to favorites:', err);
       throw err; // Re-throw so UI can handle it
     }
-  };
+  }, [loadFavorites]);
 
-  const removeFromFavorites = async (breedId: number) => {
+  const removeFromFavorites = useCallback(async (breedId: number) => {
     try {
       setError(null);
       await databaseManager.removeFromFavorites(breedId);
@@ -120,13 +132,13 @@ export function useFavorites() {
       console.error('Error removing from favorites:', err);
       throw err; // Re-throw so UI can handle it
     }
-  };
+  }, [loadFavorites]);
 
-  const isFavorite = (breedId: number): boolean => {
+  const isFavorite = useCallback((breedId: number): boolean => {
     return favoriteIds.includes(breedId);
-  };
+  }, [favoriteIds]);
 
-  const toggleFavorite = async (breedId: number) => {
+  const toggleFavorite = useCallback(async (breedId: number) => {
     console.log('Toggle favorite called for breed ID:', breedId, 'Currently favorite:', isFavorite(breedId));
     if (isFavorite(breedId)) {
       console.log('Removing from favorites...');
@@ -135,7 +147,7 @@ export function useFavorites() {
       console.log('Adding to favorites...');
       await addToFavorites(breedId);
     }
-  };
+  }, [isFavorite, removeFromFavorites, addToFavorites]);
 
   return {
     favorites,

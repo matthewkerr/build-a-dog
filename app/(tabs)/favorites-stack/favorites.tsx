@@ -33,7 +33,11 @@ export default function FavoritesScreen() {
   useFocusEffect(
     React.useCallback(() => {
       scrollViewRef.current?.scrollTo({ y: 0, animated: false });
-    }, [])
+      // Refresh favorites when the screen comes into focus
+      if (isInitialized) {
+        loadFavorites();
+      }
+    }, [isInitialized, loadFavorites])
   );
 
   const handleBackPress = () => {
@@ -42,7 +46,7 @@ export default function FavoritesScreen() {
 
   const handleBreedPress = (breed: DogBreed) => {
     router.push({
-      pathname: '/(tabs)/browse-stack/breed-detail-flow',
+      pathname: '/(tabs)/favorites-stack/breed-detail-flow',
       params: { breedId: breed.id.toString() }
     });
   };
@@ -55,12 +59,9 @@ export default function FavoritesScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Pressable style={styles.backButton} onPress={handleBackPress}>
-          <Text style={styles.backButtonText}>← Back</Text>
-        </Pressable>
-        <View style={styles.titleContainer}>
+        {/* <View style={styles.titleContainer}>
           <Text style={styles.headerTitle}>My Favorites</Text>
-        </View>
+        </View> */}
       </View>
       
       <ScrollView 
@@ -89,7 +90,7 @@ export default function FavoritesScreen() {
             </View>
           ) : (
             <>
-              <Text style={styles.title}>Your Favorite Dogs</Text>
+              <Text style={[styles.title, { textAlign: 'center' }]}>Your Favorite Dogs</Text>
               <View style={styles.breedsGrid}>
                 {favoriteBreeds.map((breed) => (
                   <View key={breed.id} style={styles.breedCard}>

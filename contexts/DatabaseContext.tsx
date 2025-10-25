@@ -5,6 +5,7 @@ interface DatabaseContextType {
   isInitialized: boolean;
   isLoading: boolean;
   error: string | null;
+  resetDatabase: () => Promise<void>;
 }
 
 const DatabaseContext = createContext<DatabaseContextType | undefined>(undefined);
@@ -14,10 +15,10 @@ interface DatabaseProviderProps {
 }
 
 export function DatabaseProvider({ children }: DatabaseProviderProps) {
-  const { isInitialized, isLoading, error } = useDatabase();
+  const { isInitialized, isLoading, error, resetDatabase } = useDatabase();
 
   return (
-    <DatabaseContext.Provider value={{ isInitialized, isLoading, error }}>
+    <DatabaseContext.Provider value={{ isInitialized, isLoading, error, resetDatabase }}>
       {children}
     </DatabaseContext.Provider>
   );

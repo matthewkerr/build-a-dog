@@ -89,12 +89,16 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.light.secondarySand,
   },
   backButton: {
-    padding: 8,
+    padding: 12,
+    backgroundColor: 'rgba(76, 181, 171, 0.1)',
+    borderRadius: 8,
+    zIndex: 11,
+    elevation: 11,
   },
   backButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.light.primaryTeal,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   titleContainer: {
     position: 'absolute',

@@ -278,6 +278,11 @@ class DatabaseManager {
     await this.db.runAsync('DELETE FROM favorites WHERE breed_id = ?', [breedId]);
   }
 
+  async resetDatabase(): Promise<void> {
+    if (!this.db) throw new Error('Database not initialized');
+    await this.db.execAsync('DELETE FROM favorites');
+  }
+
   async isFavorite(breedId: number): Promise<boolean> {
     if (!this.db) throw new Error('Database not initialized');
     
