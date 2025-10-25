@@ -12,7 +12,7 @@ import Colors from '@/constants/Colors';
 
 export default function FlowResultsScreen() {
   const router = useRouter();
-  const { preferences } = useFlow();
+  const { preferences, resetPreferences } = useFlow();
   const { breeds, loadAllBreeds } = useBreeds();
   const { findBestMatches, isMatching } = useBreedMatcher();
   const { isInitialized } = useDatabaseContext();
@@ -49,9 +49,12 @@ export default function FlowResultsScreen() {
     }
   };
 
-  const handleBreedPress = (breed: any) => {
-    router.push(`/flow/breed-detail-flow?breedId=${breed.id}`);
-  };
+   const handleBreedPress = (breed: any) => {
+     router.push({
+       pathname: '/(tabs)/search-stack/breed-detail-flow',
+       params: { breedId: breed.id.toString() }
+     });
+   };
 
   const handleFavoritePress = (breed: any) => {
     setFavorites(prev => {
@@ -65,6 +68,11 @@ export default function FlowResultsScreen() {
       }
       return newFavorites;
     });
+  };
+
+  const handleSearchAgain = () => {
+    resetPreferences();
+    router.replace('/(tabs)/search-stack/size');
   };
 
   return (
@@ -124,7 +132,7 @@ export default function FlowResultsScreen() {
              {matches.length > 0 && (
              <Pressable 
                style={styles.findButton} 
-               onPress={() => router.push('/(tabs)/index' as any)}
+               onPress={handleSearchAgain}
              >
                <Text style={styles.findButtonText}>
                  Search Again

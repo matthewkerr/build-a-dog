@@ -21,6 +21,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="index"
       screenOptions={{
         tabBarActiveTintColor: Colors.light.tint,
         tabBarInactiveTintColor: '#666666',
@@ -38,52 +39,29 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Find Match',
-          tabBarIcon: ({ color }) => <TabBarIcon name="magic" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors.light.textCharcoal}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="browse"
-        options={{
-          title: 'Browse Dogs',
-          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="favorites"
-        options={{
-          title: 'Favorites',
-          tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="adoption"
-        options={{
-          title: 'Adoption',
+          title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          headerShown: false,
         }}
+        // options={{
+        //   title: 'Find Match',
+        //   tabBarIcon: ({ color }) => <TabBarIcon name="magic" color={color} />,
+        //   headerRight: () => (
+        //     <Link href="/modal" asChild>
+        //       <Pressable>
+        //         {({ pressed }) => (
+        //           <FontAwesome
+        //             name="info-circle"
+        //             size={25}
+        //             color={Colors.light.textCharcoal}
+        //             style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+        //           />
+        //         )}
+        //       </Pressable>
+        //     </Link>
+        //   ),
+        // }}
       />
-              <Tabs.Screen
-          name="tips"
-          options={{
-            title: 'Tips',
-            tabBarIcon: ({ color }) => <TabBarIcon name="lightbulb-o" color={color} />,
-          }}
-        />
         <Tabs.Screen
           name="about"
           options={{
@@ -91,11 +69,48 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <TabBarIcon name="info-circle" color={color} />,
           }}
         />
+       
+        {/* Hidden stack screens - registered for routing but not visible in tab bar */}
         <Tabs.Screen
-          name="flow"
+          name="flow-stack"
           options={{
-            title: 'Flow',
-            tabBarIcon: ({ color }) => <TabBarIcon name="random" color={color} />,
+            href: null,
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="search-stack"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="browse-stack"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="favorites-stack"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="adoption-stack"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="tips-stack"
+          options={{
+            href: null,
+            headerShown: false,
           }}
         />
     </Tabs>

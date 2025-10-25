@@ -49,9 +49,12 @@ export default function FlowResultsScreen() {
     }
   };
 
-  const handleBreedPress = (breed: any) => {
-    router.push(`/flow/breed-detail-flow?breedId=${breed.id}`);
-  };
+   const handleBreedPress = (breed: any) => {
+     router.push({
+       pathname: '/(tabs)/flow-stack/breed-detail-flow',
+       params: { breedId: breed.id.toString() }
+     });
+   };
 
   const handleFavoritePress = (breed: any) => {
     setFavorites(prev => {
@@ -124,7 +127,7 @@ export default function FlowResultsScreen() {
              {matches.length > 0 && (
              <Pressable 
                style={styles.findButton} 
-               onPress={() => router.push('/(tabs)/index' as any)}
+               onPress={() => router.push('/(tabs)/flow')}
              >
                <Text style={styles.findButtonText}>
                  Search Again
