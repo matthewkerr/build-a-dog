@@ -155,9 +155,9 @@ export default function SettingsScreen() {
   };
 
   const handlePrivacyPolicy = () => {
-    const privacyUrl = 'https://matthewkerr.org/furvana-privacy';
+    const privacyUrl = 'https://matthewkerr.org/furvana/privacy';
     Linking.openURL(privacyUrl).catch(() => {
-      Alert.alert('Privacy Policy', 'Please visit matthewkerr.org/furvana-privacy for our privacy policy.');
+      Alert.alert('Privacy Policy', 'Please visit matthewkerr.org/furvana/privacy for our privacy policy.');
     });
   };
 
@@ -194,7 +194,10 @@ export default function SettingsScreen() {
           </Text>
         </View>
 
-        {__DEV__ && (
+        {/* )} */}
+
+        {/* Debug tools temporarily hidden for screenshots */}
+        {/* {__DEV__ && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Debug Tools</Text>
             <Text style={styles.debugNote}>
@@ -235,7 +238,7 @@ export default function SettingsScreen() {
               Debug tools for development. Reset will delete all favorites permanently.
             </Text>
           </View>
-        )}
+        )} */}
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Support</Text>
