@@ -3,12 +3,37 @@ import { StyleSheet, View, Pressable, Text, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useBreedsContext } from '@/contexts/BreedsContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Colors from '@/constants/Colors';
 
 export default function FlowScreen() {
   const router = useRouter();
   const { breeds, isLoading: breedsLoading } = useBreedsContext();
+
+  // Check if we should automatically navigate to search (from welcome screen)
+  useEffect(() => {
+    const checkShouldNavigate = async () => {
+      try {
+        const shouldNavigate = await AsyncStorage.getItem('@furvana_navigate_to_search');
+        if (shouldNavigate === 'true') {
+          // Clear the flag
+          await AsyncStorage.removeItem('@furvana_navigate_to_search');
+          // Navigate to search after a brief delay
+          setTimeout(() => {
+            router.push('/(tabs)/search-stack/size');
+          }, 300);
+        }
+      } catch (error) {
+        console.log('Error checking navigation flag:', error);
+      }
+    };
+
+    // Only check if not loading breeds
+    if (!breedsLoading) {
+      checkShouldNavigate();
+    }
+  }, [breedsLoading]);
 
 
   const handleSearchPress = () => {

@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import breedData from '../seeder/dog_breeds_images_fixed.json';
+import breedData from '../seeder/dog_breeds_with_shelter_scores.json';
 
 export interface DogBreed {
   id: number;

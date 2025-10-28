@@ -3,17 +3,17 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Image } from 'react-native';
+import { Image, View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { DatabaseProvider, useDatabaseContext } from '@/contexts/DatabaseContext';
 import { BreedsProvider } from '@/contexts/BreedsContext';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import { useState } from 'react';
 import Colors from '@/constants/Colors';
+import WelcomeScreen from './welcome-screen';
+import { useFirstLaunch } from '@/hooks/useFirstLaunch';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -69,6 +69,8 @@ function LoadingScreen() {
 function AppContent() {
   const { isInitialized, isLoading } = useDatabaseContext();
   const [showLoading, setShowLoading] = useState(true);
+  const { isFirstLaunch, setHasLaunched } = useFirstLaunch();
+  const [showWelcomeScreen, setShowWelcomeScreen] = useState(false);
 
   console.log('AppContent - isLoading:', isLoading, 'isInitialized:', isInitialized);
 
@@ -81,12 +83,47 @@ function AppContent() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Show welcome screen if it's the first launch
+  useEffect(() => {
+    console.log('Welcome screen check:', { isFirstLaunch, showLoading, isInitialized });
+    if (isFirstLaunch === true && !showLoading && isInitialized) {
+      console.log('Showing welcome screen');
+      setShowWelcomeScreen(true);
+    }
+  }, [isFirstLaunch, showLoading, isInitialized]);
+
+  const handleWelcomeDismiss = () => {
+    console.log('Dismissing welcome screen and marking as launched');
+    setHasLaunched();
+    setShowWelcomeScreen(false);
+  };
+
+  const handleNavigateToSearch = async () => {
+    console.log('Will navigate to search');
+    // Save flag to navigate to search after welcome is dismissed
+    try {
+      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+      await AsyncStorage.setItem('@furvana_navigate_to_search', 'true');
+    } catch (error) {
+      console.log('Error setting navigation flag:', error);
+    }
+    setShowWelcomeScreen(false);
+    setHasLaunched();
+  };
+
   if (isLoading || !isInitialized || showLoading) {
     console.log('Showing loading screen');
     return <LoadingScreen />;
   }
 
-  console.log('Showing main app');
+  console.log('Showing main app, welcome screen visible:', showWelcomeScreen);
+  
+  // Show welcome screen ONLY on first launch - completely replace tabs
+  if (showWelcomeScreen) {
+    return <WelcomeScreen onDismiss={handleWelcomeDismiss} onNavigateToSearch={handleNavigateToSearch} />;
+  }
+
+  // Render the Stack navigation only after welcome is dismissed
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

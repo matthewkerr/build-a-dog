@@ -1,0 +1,66 @@
+# Development files
+*.py
+*.md
+*.txt
+
+# Old seeder files (only keep dog_breeds_with_shelter_scores.json)
+seeder/dog_breeds_all_sizes_fixed.json
+seeder/dog_breeds_bulldog_fixed.json
+seeder/dog_breeds_completely_fixed.json
+seeder/dog_breeds_corrected.json
+seeder/dog_breeds_descriptions_fixed.json
+seeder/dog_breeds_fully_corrected.json
+seeder/dog_breeds_images_fixed.json
+seeder/dog_breeds_sizes_fixed.json
+seeder/dog_breeds_weight_corrected.json
+seeder/dog_breeds_final_corrected.json
+seeder/dog_breeds_all_sizes_fixed.json
+seeder/fix_breed_data.py
+seeder/verify_data.py
+seeder/reset_database.js
+
+# Test files
+test_*.js
+*_test.js
+__tests__/**/*.js
+
+# Python scripts
+*.py
+*.pyc
+
+# Documentation
+*.md
+!README.md
+
+# Reports
+description_audit_report.md
+missing_images_report.md
+
+# Old/unused flow files
+app/extra/**
+app/flow/**
+
+# Extra images (keep only breeds_resized)
+assets/images/breeds/**
+!assets/images/breeds_resized/**
+
+# Python virtual environments
+venv/
+env/
+.python-version
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/**
+.idea/**
+
+# Build artifacts
+dist/
+build/
+
+# Logs
+*.log
+
