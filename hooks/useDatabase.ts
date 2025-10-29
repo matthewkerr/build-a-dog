@@ -18,7 +18,7 @@ export function useDatabase() {
       setIsInitialized(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to initialize database');
-      console.error('Database initialization error:', err);
+      // // // console.error('Database initialization error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -30,7 +30,7 @@ export function useDatabase() {
       await databaseManager.resetDatabase();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to reset database');
-      console.error('Error resetting database:', err);
+      // // // console.error('Error resetting database:', err);
       throw err;
     }
   }, []);
@@ -57,7 +57,7 @@ export function useBreeds() {
       setBreeds(allBreeds);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load breeds');
-      console.error('Error loading breeds:', err);
+      // // // console.error('Error loading breeds:', err);
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +71,7 @@ export function useBreeds() {
       setBreeds(filteredBreeds);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to search breeds');
-      console.error('Error searching breeds:', err);
+      // // // console.error('Error searching breeds:', err);
     } finally {
       setIsLoading(false);
     }
@@ -104,7 +104,7 @@ export function useFavorites() {
       setFavoriteIds(favoriteIdsData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load favorites');
-      console.error('Error loading favorites:', err);
+      // // // console.error('Error loading favorites:', err);
     } finally {
       setIsLoading(false);
     }
@@ -117,7 +117,7 @@ export function useFavorites() {
       await loadFavorites(); // Refresh the list
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add to favorites');
-      console.error('Error adding to favorites:', err);
+      // // // console.error('Error adding to favorites:', err);
       throw err; // Re-throw so UI can handle it
     }
   }, [loadFavorites]);
@@ -129,7 +129,7 @@ export function useFavorites() {
       await loadFavorites(); // Refresh the list
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to remove from favorites');
-      console.error('Error removing from favorites:', err);
+      // // // console.error('Error removing from favorites:', err);
       throw err; // Re-throw so UI can handle it
     }
   }, [loadFavorites]);
@@ -139,12 +139,12 @@ export function useFavorites() {
   }, [favoriteIds]);
 
   const toggleFavorite = useCallback(async (breedId: number) => {
-    console.log('Toggle favorite called for breed ID:', breedId, 'Currently favorite:', isFavorite(breedId));
+    // console.log('Toggle favorite called for breed ID:', breedId, 'Currently favorite:', isFavorite(breedId));
     if (isFavorite(breedId)) {
-      console.log('Removing from favorites...');
+      // // // console.log('Removing from favorites...');
       await removeFromFavorites(breedId);
     } else {
-      console.log('Adding to favorites...');
+      // // // console.log('Adding to favorites...');
       await addToFavorites(breedId);
     }
   }, [isFavorite, removeFromFavorites, addToFavorites]);
@@ -175,7 +175,7 @@ export function useDatabaseStats() {
       setStats(statsData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load stats');
-      console.error('Error loading stats:', err);
+      // // // console.error('Error loading stats:', err);
     } finally {
       setIsLoading(false);
     }

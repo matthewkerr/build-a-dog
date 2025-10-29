@@ -76,8 +76,8 @@ function BreedMatchCard({ match, index, onImagePress }: BreedMatchCardProps) {
 
   const handleImagePress = () => {
     const imageSource = getBreedImage(match.breed.image_filename, match.breed.breed);
-    console.log('Image pressed for breed:', match.breed.breed);
-    console.log('Image source:', imageSource);
+    // console.log('Image pressed for breed:', match.breed.breed);
+    // console.log('Image source:', imageSource);
     if (imageSource) {
       onImagePress(imageSource, match.breed.breed);
     }
@@ -255,7 +255,7 @@ export default function ResultsScreen() {
         setMatches(results);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load results');
-        console.error('Error loading results:', err);
+        // console.error('Error loading results:', err);
       } finally {
         setIsLoading(false);
       }
@@ -366,8 +366,8 @@ export default function ResultsScreen() {
                 source={fullScreenImage.source}
                 style={styles.fullScreenImage}
                 resizeMode="contain"
-                onError={(error) => console.log('Image error:', error.nativeEvent)}
-                onLoad={() => console.log('Image loaded successfully for:', fullScreenImage.breedName)}
+                onError={(error) => {/* console.log('Image error:', error.nativeEvent) */}}
+                onLoad={() => {/* console.log('Image loaded successfully for:', fullScreenImage.breedName) */}}
               />
               <Text style={styles.fullScreenImageText}>{fullScreenImage.breedName}</Text>
             </View>

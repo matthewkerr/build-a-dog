@@ -41,13 +41,13 @@ export default function FavoritesScreen() {
 
   useEffect(() => {
     if (isInitialized) {
-      console.log('Favorites screen: Database initialized, loading favorites...');
+      // console.log('Favorites screen: Database initialized, loading favorites...');
       loadFavorites();
     }
   }, [isInitialized]);
 
   useEffect(() => {
-    console.log('Favorites screen: Favorites updated:', favorites?.length || 0, 'favorites');
+    // console.log('Favorites screen: Favorites updated:', favorites?.length || 0, 'favorites');
     if (favorites) {
       setFavoriteBreeds(favorites);
     }

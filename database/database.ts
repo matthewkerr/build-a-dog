@@ -37,20 +37,45 @@ class DatabaseManager {
       // Check if data already exists
       const breedCount = await this.db.getFirstAsync<{ count: number }>('SELECT COUNT(*) as count FROM breeds');
       
-      // Seed data if tables are empty or if forced
-      if (breedCount?.count === 0 || forceSeed) {
+      // Get current data version (from app.json or calculated hash)
+      const currentVersion = this.getDataVersion();
+      const storedVersion = await this.getStoredVersion();
+      
+      // // // // console.log(`📦 Data version check: Current=${currentVersion}, Stored=${storedVersion}`);
+      
+      // Seed data if tables are empty, if forced, or if version changed
+      const shouldReseed = breedCount?.count === 0 || forceSeed || storedVersion !== currentVersion;
+      
+      if (shouldReseed) {
+        if (breedCount?.count === 0) {
+          // // // // console.log('🌱 Seeding initial breed data...');
+        } else if (storedVersion !== currentVersion) {
+          // // console.log(`🔄 Data version changed! Reseeding data (${storedVersion} → ${currentVersion})...`);
+        } else {
+          // // // // console.log('🔄 Force seeding breed data...');
+        }
         await this.seedBreedData();
+        await this.setDataVersion(currentVersion);
       }
       
-      console.log('Database initialized successfully');
+      // // // // console.log('Database initialized successfully');
     } catch (error) {
-      console.error('Error initializing database:', error);
+      // // // // console.error('Error initializing database:', error);
       throw error;
     }
   }
 
   private async createTables(): Promise<void> {
     if (!this.db) throw new Error('Database not initialized');
+
+    // Create data_version table to track breed data updates
+    await this.db.execAsync(`
+      CREATE TABLE IF NOT EXISTS data_version (
+        id INTEGER PRIMARY KEY,
+        version TEXT NOT NULL,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
     // Create breeds table
     await this.db.execAsync(`
@@ -87,21 +112,25 @@ class DatabaseManager {
   private async seedBreedData(): Promise<void> {
     if (!this.db) throw new Error('Database not initialized');
 
-    console.log(`🌱 Seeding breed data... Found ${breedData.length} breeds to seed`);
-    console.log(`📊 First breed sample: ${breedData[0]?.breed} - ${breedData[0]?.size} - ${breedData[0]?.description?.substring(0, 50)}...`);
+    // Clear existing data before reseeding
+    await this.db.execAsync('DELETE FROM breeds');
+    // // // // console.log('🗑️  Cleared existing breed data');
+
+    // // // // console.log(`🌱 Seeding breed data... Found ${breedData.length} breeds to seed`);
+    // // console.log(`📊 First breed sample: ${breedData[0]?.breed} - ${breedData[0]?.size} - ${breedData[0]?.description?.substring(0, 50)}...`);
     
     // Log size distribution for verification
     const sizeDistribution = breedData.reduce((acc, breed) => {
       acc[breed.size] = (acc[breed.size] || 0) + 1;
       return acc;
     }, {} as { [key: string]: number });
-    console.log(`📏 Size distribution:`, sizeDistribution);
+    // // // // console.log(`📏 Size distribution:`, sizeDistribution);
     
     // Log bulldog breeds specifically
     const bulldogBreeds = breedData.filter(breed => breed.breed.includes('Bulldog'));
-    console.log(`🐕 Bulldog breeds and their sizes:`);
+    // // // // console.log(`🐕 Bulldog breeds and their sizes:`);
     bulldogBreeds.forEach(breed => {
-      console.log(`   ${breed.breed}: ${breed.size}`);
+      // // // // console.log(`   ${breed.breed}: ${breed.size}`);
     });
     
     const insertStatement = await this.db.prepareAsync(`
@@ -115,7 +144,7 @@ class DatabaseManager {
     try {
       for (let i = 0; i < breedData.length; i++) {
         const breed = breedData[i];
-        console.log(`Seeding breed ${i + 1}: ${breed.breed}`);
+        // // // // console.log(`Seeding breed ${i + 1}: ${breed.breed}`);
         
         await insertStatement.executeAsync([
           i + 1, // Generate ID starting from 1
@@ -135,13 +164,44 @@ class DatabaseManager {
         ]);
       }
       
-      console.log(`Successfully seeded ${breedData.length} breeds`);
+      // // // // console.log(`Successfully seeded ${breedData.length} breeds`);
     } catch (error) {
-      console.error('Error during seeding:', error);
+      // // // // console.error('Error during seeding:', error);
       throw error;
     } finally {
       await insertStatement.finalizeAsync();
     }
+  }
+
+  // Version management methods
+  private getDataVersion(): string {
+    // Create a version based on breed count and a hash of the data
+    // Update this version whenever you change the breed data
+    const DATA_VERSION = '1.2.0'; // Increment this when you update breed data
+    return DATA_VERSION;
+  }
+
+  private async getStoredVersion(): Promise<string> {
+    if (!this.db) throw new Error('Database not initialized');
+    
+    try {
+      const versionRecord = await this.db.getFirstAsync<{ version: string }>(
+        'SELECT version FROM data_version WHERE id = 1'
+      );
+      return versionRecord?.version || '0.0.0';
+    } catch (error) {
+      return '0.0.0'; // Return default version if table is empty
+    }
+  }
+
+  private async setDataVersion(version: string): Promise<void> {
+    if (!this.db) throw new Error('Database not initialized');
+    
+    await this.db.runAsync(
+      'INSERT OR REPLACE INTO data_version (id, version, updated_at) VALUES (1, ?, CURRENT_TIMESTAMP)',
+      [version]
+    );
+    // // // // console.log(`✅ Data version set to ${version}`);
   }
 
   // Breed queries
@@ -244,31 +304,31 @@ class DatabaseManager {
   async getFavorites(): Promise<(DogBreed & { favorited_at: string })[]> {
     if (!this.db) throw new Error('Database not initialized');
     
-    console.log('Database: Getting favorites...');
+    // // // // console.log('Database: Getting favorites...');
     const favorites = await this.db.getAllAsync<DogBreed & { favorited_at: string }>(`
       SELECT b.*, f.created_at as favorited_at
       FROM breeds b
       INNER JOIN favorites f ON b.id = f.breed_id
       ORDER BY f.created_at DESC
     `);
-    console.log('Database: Found', favorites.length, 'favorites');
+    // // // // console.log('Database: Found', favorites.length, 'favorites');
     return favorites;
   }
 
   async addToFavorites(breedId: number): Promise<void> {
     if (!this.db) throw new Error('Database not initialized');
     
-    console.log('Database: Adding breed ID', breedId, 'to favorites');
+    // // // // console.log('Database: Adding breed ID', breedId, 'to favorites');
     try {
       await this.db.runAsync('INSERT INTO favorites (breed_id) VALUES (?)', [breedId]);
-      console.log('Database: Successfully added breed ID', breedId, 'to favorites');
+      // // // // console.log('Database: Successfully added breed ID', breedId, 'to favorites');
     } catch (error: any) {
       // Handle unique constraint violation (breed already favorited)
       if (error.message?.includes('UNIQUE constraint failed')) {
-        console.log('Database: Breed ID', breedId, 'already in favorites');
+        // // // // console.log('Database: Breed ID', breedId, 'already in favorites');
         throw new Error('Breed is already in favorites');
       }
-      console.error('Database: Error adding to favorites:', error);
+      // // // // console.error('Database: Error adding to favorites:', error);
       throw error;
     }
   }
@@ -322,16 +382,16 @@ class DatabaseManager {
     
     await this.db.execAsync('DELETE FROM favorites');
     await this.db.execAsync('DELETE FROM breeds');
-    console.log('Database cleared');
+    // // // // console.log('Database cleared');
   }
 
   async forceReseedDatabase(): Promise<void> {
-    console.log('🔄 Force reseeding database with latest breed data...');
-    console.log('📊 Breed data loaded:', breedData.length, 'breeds');
-    console.log('📊 First breed:', breedData[0]?.breed);
+    // // // // console.log('🔄 Force reseeding database with latest breed data...');
+    // // // // console.log('📊 Breed data loaded:', breedData.length, 'breeds');
+    // // // // console.log('📊 First breed:', breedData[0]?.breed);
     
     if (!this.db) {
-      console.error('❌ Database not initialized, attempting to initialize...');
+      // // // // console.error('❌ Database not initialized, attempting to initialize...');
       await this.initializeDatabase();
       if (!this.db) throw new Error('Database initialization failed');
     }
@@ -339,11 +399,11 @@ class DatabaseManager {
     // Drop and recreate tables to ensure clean state
     await this.db.execAsync('DROP TABLE IF EXISTS favorites');
     await this.db.execAsync('DROP TABLE IF EXISTS breeds');
-    console.log('📋 Dropped existing tables');
+    // // // // console.log('📋 Dropped existing tables');
     
     // Recreate tables
     await this.createTables();
-    console.log('📋 Recreated tables');
+    // // // // console.log('📋 Recreated tables');
     
     // Force reseed with new data
     await this.seedBreedData();
@@ -351,26 +411,26 @@ class DatabaseManager {
     // Verify the data was seeded correctly
     await this.verifySeededData();
     
-    console.log('✅ Database force reseeded successfully');
+    // // // // console.log('✅ Database force reseeded successfully');
   }
 
   private async verifySeededData(): Promise<void> {
     if (!this.db) throw new Error('Database not initialized');
     
     const count = await this.db.getFirstAsync<{ count: number }>('SELECT COUNT(*) as count FROM breeds');
-    console.log(`🔍 Verification: ${count?.count} breeds in database`);
+    // // // // console.log(`🔍 Verification: ${count?.count} breeds in database`);
     
     // Check first few breeds
     const firstBreeds = await this.db.getAllAsync<DogBreed>('SELECT * FROM breeds ORDER BY id LIMIT 3');
-    console.log('🔍 First 3 breeds in database:');
+    // // // // console.log('🔍 First 3 breeds in database:');
     firstBreeds.forEach((breed, i) => {
-      console.log(`  ${i + 1}. ${breed.breed} - ${breed.size} - ${breed.description.substring(0, 40)}...`);
+      // // console.log(`  ${i + 1}. ${breed.breed} - ${breed.size} - ${breed.description.substring(0, 40)}...`);
     });
     
     // Check specific problematic breeds
     const rottweiler = await this.db.getFirstAsync<DogBreed>('SELECT * FROM breeds WHERE breed = ?', ['Rottweiler']);
     if (rottweiler) {
-      console.log(`🔍 Rottweiler check: Size=${rottweiler.size}, Desc starts with: ${rottweiler.description.substring(0, 30)}...`);
+      // // console.log(`🔍 Rottweiler check: Size=${rottweiler.size}, Desc starts with: ${rottweiler.description.substring(0, 30)}...`);
     }
   }
 

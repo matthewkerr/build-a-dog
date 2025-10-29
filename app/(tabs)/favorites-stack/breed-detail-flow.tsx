@@ -66,7 +66,7 @@ export default function BreedDetailScreen() {
       try {
         await toggleFavorite(selectedBreed.id);
       } catch (error) {
-        console.error('Error toggling favorite:', error);
+        // console.error('Error toggling favorite:', error);
       }
     }
   };

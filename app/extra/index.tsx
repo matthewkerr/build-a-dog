@@ -134,7 +134,7 @@ export default function TabOneScreen() {
       
       router.push(`/results?${params.toString()}`);
     } catch (error) {
-      console.error('Error navigating to results:', error);
+      // console.error('Error navigating to results:', error);
       Alert.alert('Error', 'Failed to navigate to results. Please try again.');
     }
   };

@@ -80,7 +80,7 @@ export default function ShelterScreen() {
         Alert.alert('Favorite Added', `${breed.breed} has been added to your favorites!`);
       }
     } catch (error) {
-      console.error('Error toggling favorite:', error);
+      // console.error('Error toggling favorite:', error);
       Alert.alert('Error', 'Failed to update favorite. Please try again.');
     }
   };

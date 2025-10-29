@@ -68,7 +68,7 @@ export default function SettingsScreen() {
       }
 
     } catch (error) {
-      console.error('Error saving favorites:', error);
+      // console.error('Error saving favorites:', error);
       Alert.alert('Error', 'Failed to save favorites. Please try again.');
     } finally {
       setIsSaving(false);
@@ -90,7 +90,7 @@ export default function SettingsScreen() {
               await resetDatabase();
               Alert.alert('Success', 'Database has been reset.');
             } catch (error) {
-              console.error('Error resetting database:', error);
+              // console.error('Error resetting database:', error);
               Alert.alert('Error', 'Failed to reset database. Please try again.');
             } finally {
               setIsResetting(false);
@@ -107,7 +107,7 @@ export default function SettingsScreen() {
       await loadFavorites();
       Alert.alert('Success', 'Data has been reloaded.');
     } catch (error) {
-      console.error('Error reloading data:', error);
+      // console.error('Error reloading data:', error);
       Alert.alert('Error', 'Failed to reload data. Please try again.');
     } finally {
       setIsReloading(false);
@@ -149,7 +149,7 @@ export default function SettingsScreen() {
         Alert.alert('Share Furvana', `${shareText}\n\n${shareUrl}`);
       }
     } catch (error) {
-      console.error('Error sharing app:', error);
+      // console.error('Error sharing app:', error);
       Alert.alert('Error', 'Failed to share app. Please try again.');
     }
   };

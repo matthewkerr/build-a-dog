@@ -25,7 +25,7 @@ export default function FlowScreen() {
           }, 300);
         }
       } catch (error) {
-        console.log('Error checking navigation flag:', error);
+        // // // console.log('Error checking navigation flag:', error);
       }
     };
 

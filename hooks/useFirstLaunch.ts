@@ -19,7 +19,7 @@ export function useFirstLaunch() {
         setIsFirstLaunch(false);
       }
     } catch (error) {
-      console.error('Error checking first launch:', error);
+      // // // console.error('Error checking first launch:', error);
       // Default to showing welcome if there's an error
       setIsFirstLaunch(true);
     }
@@ -30,7 +30,7 @@ export function useFirstLaunch() {
       await AsyncStorage.setItem(FIRST_LAUNCH_KEY, 'true');
       setIsFirstLaunch(false);
     } catch (error) {
-      console.error('Error setting has launched:', error);
+      // // // console.error('Error setting has launched:', error);
     }
   };
 

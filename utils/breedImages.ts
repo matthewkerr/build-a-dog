@@ -192,7 +192,7 @@ export const getBreedImage = (imageFilename: string, breedName: string) => {
   const image = breedImages[breedKey];
   
   if (!image) {
-    console.log(`Image not found for breed: "${breedName}" (key: "${breedKey}")`);
+    // console.log(`Image not found for breed: "${breedName}" (key: "${breedKey}")`);
     return null;
   }
   

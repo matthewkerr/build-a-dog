@@ -51,29 +51,29 @@ export default function BrowseScreen() {
       await toggleFavorite(breedId);
       await loadStats(); // Refresh stats to show updated favorite count
     } catch (error) {
-      console.error('Error toggling favorite:', error);
+      // console.error('Error toggling favorite:', error);
     }
   };
 
   const handleClearAndReseed = async () => {
     try {
-      console.log('Force reseeding database with corrected breed data...');
+      // console.log('Force reseeding database with corrected breed data...');
       await databaseManager.forceReseedDatabase();
       
-      console.log('Loading breeds...');
+      // console.log('Loading breeds...');
       await loadAllBreeds();
       await loadStats();
       setCurrentBreedIndex(0);
       
-      console.log('Database reseeded successfully with corrected data');
+      // console.log('Database reseeded successfully with corrected data');
     } catch (error) {
-      console.error('Error clearing and reseeding database:', error);
+      // console.error('Error clearing and reseeding database:', error);
     }
   };
 
   const handleResetDatabase = async () => {
     try {
-      console.log('🗄️ Resetting database to load shelter scores...');
+      // console.log('🗄️ Resetting database to load shelter scores...');
       
       // Clear the database completely
       await databaseManager.clearDatabase();
@@ -81,15 +81,15 @@ export default function BrowseScreen() {
       // Force reseed with shelter scores data
       await databaseManager.forceReseedDatabase();
       
-      console.log('🔄 Loading breeds with shelter scores...');
+      // console.log('🔄 Loading breeds with shelter scores...');
       await loadAllBreeds();
       await loadStats();
       setCurrentBreedIndex(0);
       
-      console.log('✅ Database reset successfully with shelter scores!');
-      console.log('🏠 You should now see breeds with proper shelter availability scores');
+      // console.log('✅ Database reset successfully with shelter scores!');
+      // console.log('🏠 You should now see breeds with proper shelter availability scores');
     } catch (error) {
-      console.error('❌ Error resetting database:', error);
+      // console.error('❌ Error resetting database:', error);
     }
   };
 
@@ -101,11 +101,11 @@ export default function BrowseScreen() {
       
       if (translationX > swipeThreshold) {
         // Swipe right - go to previous breed
-        console.log('Swipe right detected, going to previous breed');
+        // console.log('Swipe right detected, going to previous breed');
         showPreviousBreed();
       } else if (translationX < -swipeThreshold) {
         // Swipe left - go to next breed
-        console.log('Swipe left detected, going to next breed');
+        // console.log('Swipe left detected, going to next breed');
         showNextBreed();
       }
     }

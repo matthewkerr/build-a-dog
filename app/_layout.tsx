@@ -72,7 +72,7 @@ function AppContent() {
   const { isFirstLaunch, setHasLaunched } = useFirstLaunch();
   const [showWelcomeScreen, setShowWelcomeScreen] = useState(false);
 
-  console.log('AppContent - isLoading:', isLoading, 'isInitialized:', isInitialized);
+  // // // console.log('AppContent - isLoading:', isLoading, 'isInitialized:', isInitialized);
 
   useEffect(() => {
     // Show loading screen for at least 2 seconds
@@ -85,38 +85,38 @@ function AppContent() {
 
   // Show welcome screen if it's the first launch
   useEffect(() => {
-    console.log('Welcome screen check:', { isFirstLaunch, showLoading, isInitialized });
+    // // // console.log('Welcome screen check:', { isFirstLaunch, showLoading, isInitialized });
     if (isFirstLaunch === true && !showLoading && isInitialized) {
-      console.log('Showing welcome screen');
+      // // // console.log('Showing welcome screen');
       setShowWelcomeScreen(true);
     }
   }, [isFirstLaunch, showLoading, isInitialized]);
 
   const handleWelcomeDismiss = () => {
-    console.log('Dismissing welcome screen and marking as launched');
+    // // // console.log('Dismissing welcome screen and marking as launched');
     setHasLaunched();
     setShowWelcomeScreen(false);
   };
 
   const handleNavigateToSearch = async () => {
-    console.log('Will navigate to search');
+    // // // console.log('Will navigate to search');
     // Save flag to navigate to search after welcome is dismissed
     try {
       const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
       await AsyncStorage.setItem('@furvana_navigate_to_search', 'true');
     } catch (error) {
-      console.log('Error setting navigation flag:', error);
+      // // // console.log('Error setting navigation flag:', error);
     }
     setShowWelcomeScreen(false);
     setHasLaunched();
   };
 
   if (isLoading || !isInitialized || showLoading) {
-    console.log('Showing loading screen');
+    // // // console.log('Showing loading screen');
     return <LoadingScreen />;
   }
 
-  console.log('Showing main app, welcome screen visible:', showWelcomeScreen);
+  // // // console.log('Showing main app, welcome screen visible:', showWelcomeScreen);
   
   // Show welcome screen ONLY on first launch - completely replace tabs
   if (showWelcomeScreen) {

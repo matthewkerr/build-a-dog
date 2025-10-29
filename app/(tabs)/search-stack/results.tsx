@@ -64,10 +64,10 @@ export default function FlowResultsScreen() {
 
     try {
       const foundMatches = await findBestMatches(breeds, preferences);
-      console.log('foundMatches', foundMatches);
+      // console.log('foundMatches', foundMatches);
       setMatches(foundMatches);
     } catch (error) {
-      console.error('Error finding matches:', error);
+      // console.error('Error finding matches:', error);
       Alert.alert('Error', 'Failed to find matches. Please try again.');
     }
   };

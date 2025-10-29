@@ -30,7 +30,7 @@ export const useBreedMatcher = () => {
     let totalCriteria = 0;
 
     // Start with a more reasonable base score and balanced penalties
-    const baseScore = 35; // Higher base score for better starting point
+    const baseScore = 25; // Lower base score for more meaningful scoring
     let bonusScore = 0;
     let penaltyScore = 0; // Track penalties separately
 
@@ -86,7 +86,7 @@ export const useBreedMatcher = () => {
       }
     }
 
-    // Good with kids (high priority - 8 bonus points)
+    // Good with kids (high priority - 8 bonus points, severe penalty for mismatches)
     totalCriteria++;
     if (preferences.goodWithKids === null) {
       bonusScore += 2; // Lower baseline for "don't care"
@@ -96,11 +96,12 @@ export const useBreedMatcher = () => {
       perfectMatches++;
       matchReasons.push(`✨ Perfect kid match: ${breed.good_with_kids ? 'Great with kids' : 'Adult-focused'}`);
     } else {
-      // Mismatch penalty is just no bonus points
-      bonusScore += 0;
+      // CRITICAL: Negative penalty for mismatch (user requires it, breed doesn't have it)
+      penaltyScore += 12;
+      matchReasons.push(`❌ Not ${breed.good_with_kids ? 'kid' : 'adult'}-focused as required`);
     }
 
-    // Good with pets (high priority - 8 bonus points)
+    // Good with pets (high priority - 8 bonus points, severe penalty for mismatches)
     totalCriteria++;
     if (preferences.goodWithPets === null) {
       bonusScore += 2;
@@ -110,7 +111,9 @@ export const useBreedMatcher = () => {
       perfectMatches++;
       matchReasons.push(`✨ Perfect pet match: ${breed.good_with_pets ? 'Great with pets' : 'Single-pet focused'}`);
     } else {
-      bonusScore += 0;
+      // CRITICAL: Negative penalty for mismatch (user requires it, breed doesn't have it)
+      penaltyScore += 12;
+      matchReasons.push(`❌ Not ${breed.good_with_pets ? 'pet' : 'single-pet'}-friendly as required`);
     }
 
     // Trainability (medium priority - 6 bonus points)
@@ -232,7 +235,7 @@ export const useBreedMatcher = () => {
     setIsMatching(true);
     
     try {
-      console.log('🔍 Starting breed matching with', breeds.length, 'breeds');
+      // // // // console.log('🔍 Starting breed matching with', breeds.length, 'breeds');
       
       // Hidden breeds list - breeds to exclude from all results
       const hiddenBreeds = [
@@ -244,7 +247,7 @@ export const useBreedMatcher = () => {
         !hiddenBreeds.includes(breed.breed.toLowerCase())
       );
       
-      console.log(`🚫 Filtered out ${breeds.length - visibleBreeds.length} hidden breeds`);
+      // // // // console.log(`🚫 Filtered out ${breeds.length - visibleBreeds.length} hidden breeds`);
       
       // Calculate scores for all visible breeds
       const scoredBreeds = visibleBreeds.map(breed => calculateBreedScore(breed, preferences));
@@ -281,13 +284,13 @@ export const useBreedMatcher = () => {
         const isShelterBreed = match.breed.shelter_availability_score && match.breed.shelter_availability_score >= 3;
         
         if (!isShelterBreed) {
-          console.log(`🚫 Filtered out rare breed: ${match.breed.breed} (Shelter score: ${match.breed.shelter_availability_score})`);
+          // // console.log(`🚫 Filtered out rare breed: ${match.breed.breed} (Shelter score: ${match.breed.shelter_availability_score})`);
         }
         
         return isShelterBreed;
       });
       
-      console.log(`🏠 Shelter filtering: ${scoredBreedsWithCombinedScore.length} total breeds → ${shelterOnlyBreeds.length} shelter breeds`);
+      // // // // console.log(`🏠 Shelter filtering: ${scoredBreedsWithCombinedScore.length} total breeds → ${shelterOnlyBreeds.length} shelter breeds`);
       
       // Debug shelter score distribution
       const shelterScoreDistribution: { [key: number]: number } = {};
@@ -295,23 +298,23 @@ export const useBreedMatcher = () => {
         const score = match.breed.shelter_availability_score;
         shelterScoreDistribution[score] = (shelterScoreDistribution[score] || 0) + 1;
       });
-      console.log('🏠 Shelter score distribution:', shelterScoreDistribution);
+      // // // // console.log('🏠 Shelter score distribution:', shelterScoreDistribution);
       
-      // Sort by shelter availability FIRST, then by combined score, then by original match score
+      // Sort by user preferences FIRST, then by shelter availability as a tie-breaker
       const sortedBreeds = shelterOnlyBreeds.sort((a, b) => {
-        // PRIMARY SORT: by shelter availability score (highest first) - MOST IMPORTANT!
-        if (a.breed.shelter_availability_score !== b.breed.shelter_availability_score) {
-          return b.breed.shelter_availability_score - a.breed.shelter_availability_score;
-        }
-        
-        // Secondary sort: by combined score (highest first)
+        // PRIMARY SORT: by combined score (highest first) - USER PREFERENCES COME FIRST!
         if (Math.round(b.combinedScore) !== Math.round(a.combinedScore)) {
           return b.combinedScore - a.combinedScore;
         }
         
-        // Tertiary sort: by original match score (highest first)
+        // Secondary sort: by original match score (highest first)
         if (b.originalScore !== a.originalScore) {
           return b.originalScore - a.originalScore;
+        }
+        
+        // Tertiary sort: by shelter availability score (highest first) - as tiebreaker
+        if (a.breed.shelter_availability_score !== b.breed.shelter_availability_score) {
+          return b.breed.shelter_availability_score - a.breed.shelter_availability_score;
         }
         
         // Fourth sort: prioritize breeds that are good with kids and pets (more versatile)
@@ -343,54 +346,77 @@ export const useBreedMatcher = () => {
         'Below 60%': sortedBreeds.filter(b => b.originalScore < 60).length,
       };
       
-      console.log('📊 Original score distribution:', scoreDistribution);
-      console.log('🏆 Top 5 results (Shelter Score → Combined Score → Original Score):', sortedBreeds.slice(0, 5).map(b => 
-        `${b.breed.breed}: Shelter ${b.breed.shelter_availability_score} → Combined ${Math.round(b.combinedScore)}% → Original ${b.originalScore}%`
-      ));
+      // // // // console.log('📊 Original score distribution:', scoreDistribution);
+      // // console.log('🏆 Top 5 results (Combined Score → Original Score → Shelter Score):', sortedBreeds.slice(0, 5).map(b => 
+      //   `${b.breed.breed}: Combined ${Math.round(b.combinedScore)}% → Original ${b.originalScore}% → Shelter ${b.breed.shelter_availability_score}`
+      // ));
       
       // Debug logging for specific breeds if they appear in top results
       const debugBreeds = ['Akita', 'Labradoodle', 'Golden Retriever', 'Jack Russell Terrier', 'Bulldog', 'Alaskan Malamute'];
       sortedBreeds.slice(0, 10).forEach(match => {
         if (debugBreeds.includes(match.breed.breed)) {
-          console.log(`🔍 ${match.breed.breed} - Size: ${match.breed.size}, Grooming: ${match.breed.grooming_needs}, Original Score: ${match.originalScore}, Combined: ${Math.round(match.combinedScore)}`);
+          // // console.log(`🔍 ${match.breed.breed} - Size: ${match.breed.size}, Grooming: ${match.breed.grooming_needs}, Original Score: ${match.originalScore}, Combined: ${Math.round(match.combinedScore)}`);
         }
       });
       
       // Special debugging for Akita specifically
       const akitaMatch = sortedBreeds.find(match => match.breed.breed === 'Akita');
       if (akitaMatch) {
-        console.log(`🚨 AKITA DEBUG - Size: ${akitaMatch.breed.size}, Grooming: ${akitaMatch.breed.grooming_needs}, Original Score: ${akitaMatch.originalScore}, Combined: ${Math.round(akitaMatch.combinedScore)}`);
+        // // console.log(`🚨 AKITA DEBUG - Size: ${akitaMatch.breed.size}, Grooming: ${akitaMatch.breed.grooming_needs}, Original Score: ${akitaMatch.originalScore}, Combined: ${Math.round(akitaMatch.combinedScore)}`);
       }
       
       // STRICT SIZE FILTERING: Only show breeds that match the requested size (unless "Any" is selected)
       let sizeFilteredBreeds = sortedBreeds;
       if (preferences.size !== 'Any') {
         sizeFilteredBreeds = sortedBreeds.filter(match => match.breed.size === preferences.size);
-        console.log(`📏 Size filtering: ${sortedBreeds.length} breeds → ${sizeFilteredBreeds.length} ${preferences.size} breeds`);
+        // // // // console.log(`📏 Size filtering: ${sortedBreeds.length} breeds → ${sizeFilteredBreeds.length} ${preferences.size} breeds`);
         
         // Log any breeds that were filtered out due to size mismatch
         const filteredOutBreeds = sortedBreeds.filter(match => match.breed.size !== preferences.size);
         if (filteredOutBreeds.length > 0) {
-          console.log(`🚫 Size-filtered breeds:`, filteredOutBreeds.slice(0, 5).map(b => `${b.breed.breed} (${b.breed.size})`));
+          // // console.log(`🚫 Size-filtered breeds:`, filteredOutBreeds.slice(0, 5).map(b => `${b.breed.breed} (${b.breed.size})`));
         }
       }
       
-      // Filter out very poor matches and return top 10
-      const goodMatches = sizeFilteredBreeds.filter(match => match.originalScore >= 40); // Lower threshold to 40%+ for more variety
-      const topMatches = goodMatches.slice(0, 10).map(match => ({
+      // Filter out very poor matches
+      const goodMatches = sizeFilteredBreeds.filter(match => match.originalScore >= 35);
+      
+      // Deduplicate bulldogs - only show one bulldog breed (they're essentially the same)
+      const deduplicatedMatches = [];
+      let bulldogSeen = false;
+      
+      for (const match of goodMatches) {
+        const breedName = match.breed.breed.toLowerCase();
+        
+        // Check if this is a bulldog variation
+        if (breedName.includes('bulldog')) {
+          if (!bulldogSeen) {
+            bulldogSeen = true;
+            deduplicatedMatches.push(match);
+          }
+          // Skip other bulldog variations
+          continue;
+        }
+        
+        // All other breeds pass through
+        deduplicatedMatches.push(match);
+      }
+      
+      const topMatches = deduplicatedMatches.slice(0, 30).map(match => ({
         breed: match.breed,
         score: match.originalScore, // Keep original score for display
         matchReasons: match.matchReasons
       }));
       
-      console.log(`📊 Filtered ${sortedBreeds.length - goodMatches.length} poor matches (below 50%)`);
-      console.log(`🏆 Returning ${topMatches.length} good matches`);
+      // // console.log(`📊 Filtered ${sortedBreeds.length - goodMatches.length} poor matches (below 40%)`);
+      // // // // console.log(`🔄 Deduplicated bulldogs: ${goodMatches.length} breeds → ${deduplicatedMatches.length} after deduplication`);
+      // // // // console.log(`🏆 Returning ${topMatches.length} good matches`);
       
       // Final size verification logging
       if (preferences.size !== 'Any') {
-        console.log(`🔍 FINAL SIZE VERIFICATION for "${preferences.size}" search:`);
+        // // // // console.log(`🔍 FINAL SIZE VERIFICATION for "${preferences.size}" search:`);
         topMatches.forEach((match, index) => {
-          console.log(`   ${index + 1}. ${match.breed.breed} - Size: ${match.breed.size} ✅`);
+          // // // // console.log(`   ${index + 1}. ${match.breed.breed} - Size: ${match.breed.size} ✅`);
         });
       }
       
